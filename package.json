@@ -17,9 +17,13 @@
   },
   "homepage": "https://github.com/zzolo/mn-elections-api#readme",
   "dependencies": {
+    "airtable": "^0.5.0",
     "byline": "^5.0.0",
+    "debug": "^2.6.8",
+    "dotenv": "^4.0.0",
     "ftp": "^0.3.10",
     "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
     "node-fetch": "^1.7.1",
     "parse-full-name": "^1.2.3",
     "titlecase": "^1.1.2"

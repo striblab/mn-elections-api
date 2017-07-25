@@ -1,12 +1,4 @@
-files/*
-migration/*
-migration-static/*
-migration-tiles/*
-tiles/*
-.awspublish*
-
-# Not sure where this is coming from
-tallies.csv
+export/*
 
 # Common
 .drake
