@@ -1,5 +1,5 @@
 /**
- * Test lib.common.js
+ * Test lib/common.js
  */
 
 // Implicit depedences
@@ -37,11 +37,11 @@ describe('lib/common | styleName', () => {
   });
 
   test('removes personal titles', () => {
-    expect(common.styleName({ title: 'Mr.' })).toEqual({ title: '' });
-    expect(common.styleName({ title: 'Mr' })).toEqual({ title: '' });
-    expect(common.styleName({ title: 'Mrs.' })).toEqual({ title: '' });
-    expect(common.styleName({ title: 'mrs' })).toEqual({ title: '' });
-    expect(common.styleName({ title: 'miss' })).toEqual({ title: '' });
+    expect(common.styleName({ title: 'Mr.' })).toEqual({ });
+    expect(common.styleName({ title: 'Mr' })).toEqual({ });
+    expect(common.styleName({ title: 'Mrs.' })).toEqual({ });
+    expect(common.styleName({ title: 'mrs' })).toEqual({ });
+    expect(common.styleName({ title: 'miss' })).toEqual({ });
   });
 
   test('handles suffixes', () => {
@@ -120,5 +120,9 @@ describe('lib/common | renderSortName', () => {
     expect(common.renderSortName({ first: 'First', last: 'Last' })).toBe('Last First');
     expect(common.renderSortName({ first: 'Leonard', last: 'Spaceman', title: 'Dr.' })).toBe('Spaceman Leonard');
     expect(common.renderSortName({ first: 'A', middle: 'B', last: 'C' })).toBe('C A B');
+  });
+
+  test('handles no relevant fields', () => {
+    expect(common.renderSortName({ not: 'used' })).toBe(heavy);
   });
 });
