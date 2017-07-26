@@ -29,4 +29,4 @@ Publishing to S3
 
 ## Testing
 
-(coming soon)
+To run the tests: `npm test`

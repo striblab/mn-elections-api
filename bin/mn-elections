@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+/**
+ * Main command line app.
+ */
+
+
+// Dependencies
+const resultsFetch = require('../lib/results-fetch.js');
+const setupSupplement = require('../lib/setup-supplement.js');
+
+
+// resultsFetch({
+//   sos: {
+//     host: 'ftp.sos.state.mn.us',
+//     user: 'media',
+//     password: 'results',
+//     dir: '20131105_MG'
+//   },
+//   results: [
+//     { file: 'local.txt', type: 'local' },
+//     { file: 'cntyRaces.txt', type: 'county' },
+//     { file: 'sdraceQuesions.txt', type: 'school' }
+//   ]
+// }).catch((e) => {
+//   console.error(e);
+//   process.exit(1);
+// });
+
+try {
+  setupSupplement();
+}
+catch (e) {
+  console.error(e);
+  process.exit(1);
+}
