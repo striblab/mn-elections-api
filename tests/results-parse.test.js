@@ -29,7 +29,6 @@ describe('lib/results-parse | main', () => {
       officeRaw: 'OFFICE (Elect 3) (Area)',
       question: false,
       ranked: false,
-      rankedChoice: null,
       seats: 3,
 
       precincts: 1,
@@ -40,8 +39,6 @@ describe('lib/results-parse | main', () => {
       percent: 10,
 
       party: 'PARTY',
-      incumbent: null,
-      suffix: null,
       candidateRaw: 'First Last',
       candidate: { first: 'First', last: 'Last' },
     });
@@ -51,9 +48,9 @@ describe('lib/results-parse | main', () => {
 // Raw parsing input function
 describe('lib/results-parse | raw', () => {
   test('handles nil values', () => {
-    expect(parse.raw(undefined)).toBe(null);
-    expect(parse.raw(null)).toBe(null);
-    expect(parse.raw(NaN)).toBe(null);
+    expect(parse.raw(undefined)).toBe(undefined);
+    expect(parse.raw(null)).toBe(undefined);
+    expect(parse.raw(NaN)).toBe(undefined);
   });
 
   test('handles numbers values', () => {
@@ -61,8 +58,8 @@ describe('lib/results-parse | raw', () => {
     expect(parse.raw(1, 'float')).toBe(1.0);
     expect(parse.raw(10.3, 'int')).toBe(10);
     expect(parse.raw(10.3, 'float')).toBe(10.3);
-    expect(parse.raw('s', 'float')).toBe(null);
-    expect(parse.raw('s', 'int')).toBe(null);
+    expect(parse.raw('s', 'float')).toBe(undefined);
+    expect(parse.raw('s', 'int')).toBe(undefined);
   });
 
   test('handles strings', () => {
@@ -71,7 +68,7 @@ describe('lib/results-parse | raw', () => {
     expect(parse.raw(' TEST ')).toBe('TEST');
     expect(parse.raw('TEsT')).toBe('TEsT');
     expect(parse.raw('   ')).toBe('');
-    expect(parse.raw('')).toBe(null);
+    expect(parse.raw('')).toBe(undefined);
   });
 
   test('handles others', () => {
@@ -85,11 +82,11 @@ describe('lib/results-parse | raw', () => {
 // MAke ID function
 describe('lib/results-parse | makeID', () => {
   test('non-array, non-string, non-number values', () => {
-    expect(parse.makeID(null)).toBe(null);
-    expect(parse.makeID(undefined)).toBe(null);
-    expect(parse.makeID(NaN)).toBe(null);
-    expect(parse.makeID(true)).toBe(null);
-    expect(parse.makeID({ a: 'b' })).toBe(null);
+    expect(parse.makeID(null)).toBe(undefined);
+    expect(parse.makeID(undefined)).toBe(undefined);
+    expect(parse.makeID(NaN)).toBe(undefined);
+    expect(parse.makeID(true)).toBe(undefined);
+    expect(parse.makeID({ a: 'b' })).toBe(undefined);
   });
 
   test('handles strings', () => {
@@ -101,7 +98,7 @@ describe('lib/results-parse | makeID', () => {
   });
 
   test('handles arrays', () => {
-    expect(parse.makeID([])).toBe(null);
+    expect(parse.makeID([])).toBe(undefined);
     expect(parse.makeID([' '])).toBe('|');
     expect(parse.makeID([' ', 'a', 'b'])).toBe('|-a-b');
     expect(parse.makeID([null, 'a', 'b'])).toBe('|-a-b');
@@ -149,23 +146,21 @@ describe('lib/results-parse | parseCandidate', () => {
 describe('lib/results-parse | parseOffice', () => {
 
   test('non-string returns null', () => {
-    expect(parse.parseOffice(1)).toBe(null);
-    expect(parse.parseOffice(1.0)).toBe(null);
-    expect(parse.parseOffice(null)).toBe(null);
-    expect(parse.parseOffice(undefined)).toBe(null);
-    expect(parse.parseOffice([])).toBe(null);
-    expect(parse.parseOffice({})).toBe(null);
-    expect(parse.parseOffice(() => 1)).toBe(null);
+    expect(parse.parseOffice(1)).toBe(undefined);
+    expect(parse.parseOffice(1.0)).toBe(undefined);
+    expect(parse.parseOffice(null)).toBe(undefined);
+    expect(parse.parseOffice(undefined)).toBe(undefined);
+    expect(parse.parseOffice([])).toBe(undefined);
+    expect(parse.parseOffice({})).toBe(undefined);
+    expect(parse.parseOffice(() => 1)).toBe(undefined);
   });
 
   test('handles regular office', () => {
     expect(parse.parseOffice('office for something')).toEqual({
       office: 'Office for Something',
-      area: null,
       seats: 1,
       question: false,
       ranked: false,
-      rankedChoice: null
     });
   });
 
@@ -176,7 +171,6 @@ describe('lib/results-parse | parseOffice', () => {
       seats: 1,
       question: false,
       ranked: false,
-      rankedChoice: null
     });
   });
 
@@ -187,14 +181,12 @@ describe('lib/results-parse | parseOffice', () => {
       seats: 1,
       question: true,
       ranked: false,
-      rankedChoice: null
     });
   });
 
   test('handles ranked choice', () => {
     expect(parse.parseOffice('office for something First choice')).toEqual({
       office: 'Office for Something',
-      area: null,
       seats: 1,
       question: false,
       ranked: true,
@@ -205,11 +197,9 @@ describe('lib/results-parse | parseOffice', () => {
   test('handles seats', () => {
     expect(parse.parseOffice('office for $$ (Elect 3)')).toEqual({
       office: 'Office for $$',
-      area: null,
       seats: 3,
       question: false,
       ranked: false,
-      rankedChoice: null
     });
   });
 
