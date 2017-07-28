@@ -8,6 +8,93 @@
 // To test
 const common = require('../lib/common.js');
 
+// Raw parsing input function
+describe('lib/common | raw', () => {
+  test('handles nil values', () => {
+    expect(common.raw(undefined)).toBe(undefined);
+    expect(common.raw(null)).toBe(undefined);
+    expect(common.raw(NaN)).toBe(undefined);
+  });
+
+  test('handles numbers values', () => {
+    expect(common.raw(1, 'int')).toBe(1);
+    expect(common.raw(1, 'float')).toBe(1.0);
+    expect(common.raw(10.3, 'int')).toBe(10);
+    expect(common.raw(10.3, 'float')).toBe(10.3);
+    expect(common.raw('s', 'float')).toBe(undefined);
+    expect(common.raw('s', 'int')).toBe(undefined);
+  });
+
+  test('handles strings', () => {
+    expect(common.raw('test')).toBe('test');
+    expect(common.raw('TEST')).toBe('TEST');
+    expect(common.raw(' TEST ')).toBe('TEST');
+    expect(common.raw('TEsT')).toBe('TEsT');
+    expect(common.raw('   ')).toBe('');
+    expect(common.raw('')).toBe(undefined);
+  });
+
+  test('handles others', () => {
+    expect(common.raw([1])).toHaveLength(1);
+    expect(common.raw({ this: 'that' })).toEqual({ this: 'that' });
+    expect(common.raw(false)).toBe(false);
+    expect(common.raw(true)).toBe(true);
+  });
+});
+
+// Make ID function
+describe('lib/common | makeID', () => {
+  test('non-array, non-string, non-number values', () => {
+    expect(common.makeID(null)).toBe(undefined);
+    expect(common.makeID(undefined)).toBe(undefined);
+    expect(common.makeID(NaN)).toBe(undefined);
+    expect(common.makeID(true)).toBe(undefined);
+    expect(common.makeID({ a: 'b' })).toBe(undefined);
+  });
+
+  test('handles strings', () => {
+    expect(common.makeID('a')).toBe('a');
+    expect(common.makeID(' a ')).toBe('a');
+    expect(common.makeID('-a-')).toBe('a');
+    expect(common.makeID('a b c')).toBe('a-b-c');
+    expect(common.makeID('a B c')).toBe('a-b-c');
+  });
+
+  test('handles arrays', () => {
+    expect(common.makeID([])).toBe(undefined);
+    expect(common.makeID([' '])).toBe('|');
+    expect(common.makeID([' ', 'a', 'b'])).toBe('|-a-b');
+    expect(common.makeID([null, 'a', 'b'])).toBe('|-a-b');
+    expect(common.makeID([undefined, 'a', 'b'])).toBe('|-a-b');
+    expect(common.makeID(['  0 ', 'a', 'b'])).toBe('0-a-b');
+    expect(common.makeID(['  0 ', '  a  ', '   b'])).toBe('0-a-b');
+    expect(common.makeID(['a', null, 'c', null, null, 0])).toBe('a-|-c-|-|-0');
+  });
+});
+
+// styleArea
+describe('lib/common | styleArea', () => {
+
+  test('non-string values should return themselves', () => {
+    expect(common.styleArea(1)).toBe(1);
+    expect(common.styleArea(undefined)).toBe(undefined);
+    expect(common.styleArea(null)).toBe(null);
+    expect(common.styleArea(true)).toBe(true);
+    expect(common.styleArea(1.0)).toBe(1.0);
+    expect(common.styleArea([])).toEqual([]);
+    expect(common.styleArea([1])).toHaveLength(1);
+  });
+
+  test('should handle st.', () => {
+    expect(common.styleArea(' st paul ')).toBe(' St. paul ');
+    expect(common.styleArea('-st paul ')).toBe('-St. paul ');
+    expect(common.styleArea('f st paul ')).toBe('f St. paul ');
+    expect(common.styleArea('st paul')).toBe('St. paul');
+    expect(common.styleArea('saint paul')).toBe('St. paul');
+    expect(common.styleArea('st. paul')).toBe('St. paul');
+  });
+});
+
 // StyleName function
 describe('lib/common | styleName', () => {
 

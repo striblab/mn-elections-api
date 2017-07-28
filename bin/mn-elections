@@ -7,18 +7,27 @@
 
 // Dependencies
 const resultsFetch = require('../lib/results-fetch.js');
+const metaFetch = require('../lib/meta-fetch.js');
 const setupSupplement = require('../lib/setup-supplement.js');
 const elections = require('../elections.json');
 
 let e = elections['20131105'];
 
 try {
-  resultsFetch(e);
+  metaFetch(e);
 }
 catch (e) {
   console.error(e);
   process.exit(1);
 }
+
+// try {
+//   resultsFetch(e);
+// }
+// catch (e) {
+//   console.error(e);
+//   process.exit(1);
+// }
 
 // try {
 //   setupSupplement();

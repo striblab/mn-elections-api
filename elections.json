@@ -17,7 +17,7 @@
         { "file": "MunTbl.txt", "type": "local" },
         { "file": "Cntytbl.txt", "type": "county" },
         { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "schools" }
+        { "file": "SchoolDistTbl.txt", "type": "school" }
       ]
     },
     "supplement": {
