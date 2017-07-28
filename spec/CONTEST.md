@@ -3,6 +3,11 @@ The following describes the fields for a Contest object.
 ```js
 // Candidate object
 {
+  // The type of contest, specifically the level of government, this
+  // comes from the election.json config.  This should be a defined set
+  // of options.
+  type: 'state',
+
   // The unique contest ID across all contests
   contestID: 'xxxxx',
 

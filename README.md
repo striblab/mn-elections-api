@@ -11,11 +11,11 @@ Data comes in from a few places.
     * Allows for customizing information about results coming in from SoS.
     * For contests that are not provided by SoS, for example the finals for ranked-choice voting.
 
-Results get collected and processed and exported to the `export/` folder.
-
-Publishing to S3 ...
+After getting compiled and processed, the results and other data get split up into files and published to S3.
 
 ## Usage
+
+### Creating API
 
 (coming soon, should be something like:)
 
@@ -25,6 +25,12 @@ Environment variables:
 
 * `AIRTABLE_API_KEY`
 * `AIRTABLE_BASE_ID`
+
+### Using API
+
+(coming soon)
+
+For specs on common objects in the API, see the `spec/` folder.
 
 ## Glossary
 

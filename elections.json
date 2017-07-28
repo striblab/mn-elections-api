@@ -1,0 +1,28 @@
+{
+  "notes": "This JSON describes each election and should be keyed by the YYYYMMDD of the election",
+  "20131105": {
+    "sos": {
+      "host": "ftp.sos.state.mn.us",
+      "user": "media",
+      "password": "results",
+      "dir": "20131105_MG"
+    },
+    "results": [
+      { "file": "local.txt", "type": "local" },
+      { "file": "cntyRaces.txt", "type": "county" },
+      { "file": "sdraceQuesions.txt", "type": "school" }
+    ],
+    "meta": {
+      "districts": [
+        { "file": "MunTbl.txt", "type": "local" },
+        { "file": "Cntytbl.txt", "type": "county" },
+        { "file": "PrctTbl.txt", "type": "precinct" },
+        { "file": "SchoolDistTbl.txt", "type": "schools" }
+      ]
+    },
+    "supplement": {
+      "type": "airtable",
+      "id": "apphaNpEdQoYCeh0S"
+    }
+  }
+}
