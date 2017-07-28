@@ -13,13 +13,27 @@ Data comes in from a few places.
 
 Results get collected and processed and exported to the `export/` folder.
 
-Publishing to S3
+Publishing to S3 ...
 
 ## Usage
 
 (coming soon, should be something like:)
 
 `mn-elections fetch results && mn-elections publish results`
+
+Environment variables:
+
+* `AIRTABLE_API_KEY`
+* `AIRTABLE_BASE_ID`
+
+## Glossary
+
+* `contest`: A race or ballot question.
+* `candidate`: A candidate in a contest.  This can refer to *yes* and *no* for ballot questions.
+* `results`: Refers to the results by candidate for each contest.
+* `supplement`: Manually entered data by the newsroom that overrides data that comes from the Secretary of State or other automatic sources.
+* `meta`: The meta data that is provided about contests, candidates, and districts from the Secretary of State.
+* `geo`: Data and processes that connect contests to geographical data.
 
 ## Development
 
