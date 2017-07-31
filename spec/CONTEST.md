@@ -55,6 +55,10 @@ The following describes the fields for a Contest object.
   // Whether this contest is a question
   question: false,
 
+  // The title of the question.  This should only apply if the contest is a
+  // question.
+  questionTitle: 'Example bond question',
+
   // The text of the question.  This should only apply if the contest is a
   // question.
   questionText: 'Should we do this or do that?',
