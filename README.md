@@ -23,6 +23,8 @@ After getting compiled and processed, the results and other data get split up in
 
 Environment variables:
 
+* `SOS_FTP_USER`
+* `SOS_FTP_PASS`
 * `AIRTABLE_API_KEY`
 * `AIRTABLE_BASE_ID`
 
