@@ -8,32 +8,48 @@ The following describes the fields for a Contest object.
   // of options.
   type: 'state',
 
-  // The unique contest ID across all contests
-  contestID: 'xxxxx',
+  // Election, this should be the YYYYMMDD of the election
+  election: 20170102,
 
-  // State ID, this should almost certainly be MN
-  stateID: 'MN',
-
-  // The ID of the county for the contest.  this should be the 1-87 county
-  // ID that the state uses, not the FIPS code.  This should not apply
-  // to contest that are larger than a county.
-  countyID: '16',
+  // The unique contest ID across all contests and elections.  It will
+  // be a combination of election, type, districtID, and officeID
+  id: '20170102-state-11A-22222',
 
   // The ID of the district for the contest. The district being relative
-  // to the contest itself
-  districtID: '1234',
+  // to the contest type
+  district: '1234',
 
-  // The precinct ID.  This should only be used for results by precinct
-  precinctID: '0012003123',
 
-  // The ID of the office.  This is unique across ??
-  officeID: '9001',
+  // The contest ID.  This is not unique across contests, but should be
+  // unique across types in an election.
+  contest: '9001',
 
-  // The name of the office
-  office: 'Mayor',
+  // The name of the contest.  This is not necessarily unique, but
+  // when combined with area, should provided a fairly good description
+  // of the contest.
+  name: 'Mayor',
 
   // The descriptive name of the area of the contest.
   area: 'Minneapolis',
+
+  // Other district codes that may be attached for reference, and determined
+  // from district and type
+  state: 'MN',
+  local: 'FIPS123',
+  school: '00123',
+  precinct: '00012348234',
+  hospital: '1234',
+  countyCommissioner: '123232',
+  water: '279',
+  stateHouse: '12A',
+  stateSenate: '12',
+  congress: '1',
+  // County should be the MN county codes 1-87, where 88 is state-wide
+  // race
+  county: '17',
+
+  // If the results are sub-divided
+  // TODO
 
   // Number of seats to be chosen.  For a primary, this is 1, but refers
   // to 1 for each party.
