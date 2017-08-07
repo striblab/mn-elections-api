@@ -8,34 +8,39 @@
 // Dependencies
 require('dotenv').load();
 const path = require('path');
-const resultsFetch = require('../lib/results-fetch.js');
-const metaFetch = require('../lib/meta-fetch.js');
-const setupSupplement = require('../lib/setup-supplement.js');
+const Election = require('../lib/election.js');
+
+//const resultsFetch = require('../lib/results-fetch.js');
+//const metaFetch = require('../lib/meta-fetch.js');
+//const setupSupplement = require('../lib/setup-supplement.js');
 const elections = require('../elections.json');
 
-let set = '20151103';
-elections[set].sos.user = process.env.SOS_FTP_USER;
-elections[set].sos.password = process.env.SOS_FTP_PASS;
+let set = '20160809';
+elections[set].id = set;
 
 let options = {
   exportPath: path.join(__dirname, '..', 'export', set)
 };
 
-try {
-  metaFetch(elections[set], options);
-}
-catch (e) {
-  console.error(e);
-  process.exit(1);
-}
 
-try {
-  resultsFetch(elections[set], options);
-}
-catch (e) {
-  console.error(e);
-  process.exit(1);
-}
+let e = new Election(elections[set], options);
+e.fetchResults().catch((e) => { throw e; });
+
+// try {
+//   metaFetch(elections[set], options);
+// }
+// catch (e) {
+//   console.error(e);
+//   process.exit(1);
+// }
+
+// try {
+//   resultsFetch(elections[set], options);
+// }
+// catch (e) {
+//   console.error(e);
+//   process.exit(1);
+// }
 
 // try {
 //   setupSupplement(elections[set], options);

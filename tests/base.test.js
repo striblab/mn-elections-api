@@ -166,11 +166,11 @@ describe('lib/base | parseCandidate', () => {
 
   test('handles names', () => {
     // Gets run through styleName
-    expect(base.parseCandidate('MR. HANDY')).toEqual({ last: 'Handy' });
-    expect(base.parseCandidate('MR HANDY')).toEqual({ last: 'Handy' });
-    expect(base.parseCandidate('MR HANDY JR')).toEqual({ last: 'Handy', suffix: 'Jr.' });
+    expect(base.parseCandidate('MR. HANDY')).toEqual({ last: 'Handy', title:  'Mr.' });
+    expect(base.parseCandidate('MR HANDY')).toEqual({ last: 'Handy', title:  'Mr' });
+    expect(base.parseCandidate('MR HANDY JR')).toEqual({ last: 'Handy', suffix: 'Jr', title:  'Mr' });
     expect(base.parseCandidate('Star Tribune')).toEqual({ last: 'Tribune', first: 'Star' });
-    expect(base.parseCandidate('Fir B Lass')).toEqual({ last: 'Lass', first: 'Fir', middle: 'B.' });
+    expect(base.parseCandidate('Fir B Lass')).toEqual({ last: 'Lass', first: 'Fir', middle: 'B' });
     expect(base.parseCandidate('Nicky "Nikster" Nickson')).toEqual({ last: 'Nickson', first: 'Nicky', nick: 'Nikster' });
   });
 });
@@ -191,7 +191,7 @@ describe('lib/base | parseSoSContest', () => {
 
   test('handles regular office', () => {
     expect(base.parseSoSContest('office for something')).toEqual({
-      name: 'Office for Something',
+      name: 'office for something',
       seats: 1,
       question: false,
       ranked: false,
@@ -200,7 +200,7 @@ describe('lib/base | parseSoSContest', () => {
 
   test('handles area', () => {
     expect(base.parseSoSContest('office for something (Area 54)')).toEqual({
-      name: 'Office for Something',
+      name: 'office for something',
       area: 'Area 54',
       seats: 1,
       question: false,
@@ -216,11 +216,19 @@ describe('lib/base | parseSoSContest', () => {
       question: true,
       ranked: false,
     });
+
+    expect(base.parseSoSContest('CITY QUESTION 100 (Area #1)')).toEqual({
+      name: 'CITY QUESTION 100',
+      area: 'Area #1',
+      seats: 1,
+      question: true,
+      ranked: false,
+    });
   });
 
   test('handles ranked choice', () => {
     expect(base.parseSoSContest('office for something First choice')).toEqual({
-      name: 'Office for Something',
+      name: 'office for something',
       seats: 1,
       question: false,
       ranked: true,
@@ -230,7 +238,7 @@ describe('lib/base | parseSoSContest', () => {
 
   test('handles seats', () => {
     expect(base.parseSoSContest('office for $$ (Elect 3)')).toEqual({
-      name: 'Office for $$',
+      name: 'office for $$',
       seats: 3,
       question: false,
       ranked: false,
@@ -239,7 +247,7 @@ describe('lib/base | parseSoSContest', () => {
 
   test('handles seats, ranked choice, and area', () => {
     expect(base.parseSoSContest('ANOTHER OFFICE Fourth Choice (Area) (Elect 33)')).toEqual({
-      name: 'Another Office',
+      name: 'ANOTHER OFFICE',
       area: 'Area',
       seats: 33,
       question: false,
@@ -248,7 +256,7 @@ describe('lib/base | parseSoSContest', () => {
     });
 
     expect(base.parseSoSContest('ANOTHER OFFICE Fourth Choice (Elect 33) (Area)')).toEqual({
-      name: 'Another Office',
+      name: 'ANOTHER OFFICE',
       area: 'Area',
       seats: 33,
       question: false,

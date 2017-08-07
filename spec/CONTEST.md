@@ -3,22 +3,22 @@ The following describes the fields for a Contest object.
 ```js
 // Candidate object
 {
+  // The unique contest ID across all contests and elections.  It will
+  // be a combination of election, type, districtID, and officeID
+  id: '20170102-state-11A-22222',
+
   // The type of contest, specifically the level of government, this
   // comes from the election.json config.  This should be a defined set
   // of options.
   type: 'state',
 
-  // Election, this should be the YYYYMMDD of the election
-  election: 20170102,
-
-  // The unique contest ID across all contests and elections.  It will
-  // be a combination of election, type, districtID, and officeID
-  id: '20170102-state-11A-22222',
+  // Attached data
+  election: { ... },
+  candidates: [ ... ],
 
   // The ID of the district for the contest. The district being relative
   // to the contest type
   district: '1234',
-
 
   // The contest ID.  This is not unique across contests, but should be
   // unique across types in an election.
@@ -95,7 +95,13 @@ The following describes the fields for a Contest object.
   // The total number of votes that so far
   totalVotes: 1000,
 
+  // Whether the contest is a tie or so close that a recount may happen
+  close: flase,
+
   // Unix timestamp of last updated
-  updated: 12345982374
+  updated: 12345982374,
+
+  // Any note that will display with the contest
+  note: 'Something important about this contest',
 }
 ```
