@@ -7,52 +7,126 @@
 
 // Dependencies
 require('dotenv').load();
+const command = require('yargs');
 const path = require('path');
+const _ = require('lodash');
+const mkdirp = require('mkdirp');
 const Election = require('../lib/election.js');
-
-//const resultsFetch = require('../lib/results-fetch.js');
-//const metaFetch = require('../lib/meta-fetch.js');
-//const setupSupplement = require('../lib/setup-supplement.js');
 const elections = require('../elections.json');
+const debug = require('debug')('mn-elections-api:cmd');
 
-let set = '20131105';
-elections[set].id = set;
+// Set up command line
+command.usage('\nUsage:\n  $0 <cmd> [args]');
 
-let options = {
-  exportPath: path.join(__dirname, '..', 'export', set)
+// General debug option
+command.option('debug', {
+  describe: 'Turn on debugging.',
+  type: 'boolean'
+});
+
+// Common options, but specific to command
+let common = {
+  election: {
+    alias: 'election',
+    demandOption: true,
+    describe: 'Election ID to use. To see all possible elections, use the `list` command.',
+    type: 'string'
+  },
+  output: {
+    alias: 'output',
+    demandOption: true,
+    describe: 'Path to output election to.',
+    type: 'string',
+    default: './mn-elections-output'
+  }
 };
 
-(async () => {
-  let e = new Election(elections[set], options);
+// List command
+command.command('list', 'List available elections.',  (y) => {
+  return y.usage('\nList usage:\n  $0 list');
+},  (y) => {
+  updateDebug(y);
+
+  _.each(elections, (election, k) => {
+    if (k.match(/[0-9]+/)) {
+      output(k);
+    }
+  });
+});
+
+// Results command
+command.command('results', 'Get results for an election.', (y) => {
+  return y.usage('\nResults usage:\n  $0 results -e <election> -o <output> [args]')
+    .option('e', common.election)
+    .option('o', common.output);
+},  (y) => {
+  updateDebug(y);
+  checkElection(y);
+
+  // Check id in election
+  elections[y.election].id = elections[y.election].id || y.election;
+
+  // Create election object
+  let e;
   try {
-    await e.fetchResults();
+    e = new Election(elections[y.election], {
+      exportPath: path.join(y.output, y.election)
+    });
   }
   catch (e) {
-    console.error('Error');
-    console.error(e);
+    debug(e);
+    error('Error trying to create election "' + y.election + '"');
   }
-})();
 
-// try {
-//   metaFetch(elections[set], options);
-// }
-// catch (e) {
-//   console.error(e);
-//   process.exit(1);
-// }
+  // Fetch
+  try {
+    e.fetchResults();
+  }
+  catch (e) {
+    debug(e);
+    error('Error trying fetch results for election "' + y.election + '"');
+  }
+});
 
-// try {
-//   resultsFetch(elections[set], options);
-// }
-// catch (e) {
-//   console.error(e);
-//   process.exit(1);
-// }
 
-// try {
-//   setupSupplement(elections[set], options);
-// }
-// catch (e) {
-//   console.error(e);
-//   process.exit(1);
-// }
+
+// Setup help and parse
+command.help().argv;
+
+
+// Check election arguments
+function checkElection(y) {
+  // Check election
+  if (!y.election || !elections[y.election]) {
+    error('Election "' + y.election + '" not found; use the `list` command to see available elections.');
+  }
+
+  // Check output
+  let output = path.resolve(y.output);
+  try {
+    mkdirp.sync(output);
+  }
+  catch (e) {
+    debug(e);
+    error('Error trying to create output directory "' + output + '"');
+  }
+}
+
+// Handle debug
+function updateDebug(y) {
+  if (y.debug) {
+    process.env.DEBUG = process.env.DEBUG === '*' ? '*' : 'mn-elections-api:*';
+    debug.enabled = true;
+  }
+}
+
+// General output function
+function output(...args) {
+  console.error(...args);
+}
+
+// Error
+function error(...args) {
+  output(...args);
+  process.exit(1);
+}
