@@ -9,8 +9,8 @@
 const Candidate = require('../lib/candidate.js');
 
 
-// Get function
-describe('lib/contest | constructor', () => {
+// Constructor function
+describe('lib/candidate | constructor', () => {
   let candidate = (...args) => {
     return new Candidate(...args);
   };

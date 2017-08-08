@@ -96,6 +96,16 @@ describe('lib/base | set', () => {
     expect(base('', { a: 'b', c: [ 1, 2 ] })).toEqual({ a: 'b', c: [ 1, 2 ] });
   });
 
+  test('delete property', () => {
+    let b = new Base();
+
+    b.set('a', 2);
+    expect(b.get('a')).toBe(2);
+
+    b.set('a', undefined);
+    expect(b.get('a')).toBeUndefined();
+  });
+
   test('merging', () => {
     let b = new Base();
 

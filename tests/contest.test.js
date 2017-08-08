@@ -125,7 +125,7 @@ describe('lib/contest | validation', () => {
     expect(() => {
       let c = new Contest({ a: 'b' }, {}, {}, mockE());
       return c;
-    }).toThrow(/field not present/i);
+    }).toThrow(/.*/i);
   });
 
   test('should not throw on valid', () => {
@@ -137,9 +137,9 @@ describe('lib/contest | validation', () => {
         candidates: [
           { id: '123', lastName: 'name' }
         ]
-      }, { type: 'test', }, {}, mockE({ id: 1234 }));
+      }, { type: 'county', }, {}, mockE({ id: 1234 }));
       return c;
-    }).not.toThrow(/field not present/i);
+    }).not.toThrow(/.*/i);
   });
 });
 
@@ -153,7 +153,7 @@ describe('lib/contest | real input', () => {
       'MN;02;;0393;County Commissioner District 3;03;9003;Michael Harasyn;;;NP;20;20;201;7.56;2659'
     ];
     let props = {
-      type: 'countyCommissioner'
+      type: 'county-commissioner'
     };
     let e = mockE({
       id: '1234',

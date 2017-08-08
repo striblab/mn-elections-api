@@ -1,6 +1,7 @@
 {
   "notes": "This JSON describes each election and should be keyed by the YYYYMMDD of the election",
   "20131105": {
+    "notes": "The SoS does not have any ballot question text",
     "sos": {
       "host": "ftp.sos.state.mn.us",
       "dir": "20131105_MG"

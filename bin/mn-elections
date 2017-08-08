@@ -15,16 +15,23 @@ const Election = require('../lib/election.js');
 //const setupSupplement = require('../lib/setup-supplement.js');
 const elections = require('../elections.json');
 
-let set = '20160809';
+let set = '20131105';
 elections[set].id = set;
 
 let options = {
   exportPath: path.join(__dirname, '..', 'export', set)
 };
 
-
-let e = new Election(elections[set], options);
-e.fetchResults().catch((e) => { throw e; });
+(async () => {
+  let e = new Election(elections[set], options);
+  try {
+    await e.fetchResults();
+  }
+  catch (e) {
+    console.error('Error');
+    console.error(e);
+  }
+})();
 
 // try {
 //   metaFetch(elections[set], options);
