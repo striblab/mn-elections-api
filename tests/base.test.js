@@ -151,6 +151,40 @@ describe('lib/base | set', () => {
   });
 });
 
+// Set gentle
+describe('lib/base | setGently', () => {
+  let base = (...args) => {
+    let b = new Base();
+    return b.setGently(...args);
+  };
+
+  test('set regular', () => {
+    expect(base('k', 'v')).toEqual({ k: 'v' });
+    expect(base('k[0]', 'v')).toEqual({ k: ['v'] });
+    expect(base('k.j', 2)).toEqual({ k: { j: 2 } });
+    expect(base('k', { a: 'b' })).toEqual({ k: { a: 'b' } });
+  });
+
+  test('gentle set single property', () => {
+    let b = new Base();
+    b.set('k', 'v');
+
+    expect(b.setGently('k', '')).toEqual({ k: 'v' });
+    expect(b.setGently('k', undefined)).toEqual({ k: 'v' });
+    expect(b.setGently('k', null)).toEqual({ k: 'v' });
+
+    expect(b.setGently('k', 1)).toEqual({ k: 1 });
+    expect(b.setGently('k', 1.0)).toEqual({ k: 1.0 });
+  });
+
+  test('gentle set objects', () => {
+    let b = new Base();
+    b.set('a.b', 'c');
+
+    expect(b.setGently('', { a: undefined })).toEqual({ a: { b: 'c' } });
+  });
+});
+
 
 // Parse candidate function
 describe('lib/base | parseCandidate', () => {

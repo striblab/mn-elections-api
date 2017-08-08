@@ -28,7 +28,8 @@
     "moment": "^2.18.1",
     "node-fetch": "^1.7.1",
     "parse-full-name": "^1.2.3",
-    "titlecase": "^1.1.2"
+    "titlecase": "^1.1.2",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "jest": "^20.0.4"
