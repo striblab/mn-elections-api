@@ -40,7 +40,8 @@ The following describes the fields for an Election object.
       //
       // state, local, school, precinct, hospital, county,
       // county-commissioner, soil-water, state-house, state-senate,
-      // congress, amendment, mn-president
+      // us-house, us-senate, amendment, mn-president,
+      // judicial, judicial-district
       type: "local"
     },
     ...

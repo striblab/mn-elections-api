@@ -8,8 +8,7 @@ The following describes the fields for a Contest object.
   id: '20170102-state-11A-22222',
 
   // The type of contest, specifically the level of government, this
-  // comes from the election.json config.  This should be a defined set
-  // of options.
+  // comes from the election.json config.  See ELECTION.md for options
   type: 'state',
 
   // Attached data

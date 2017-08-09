@@ -68,8 +68,13 @@ command.command('list', 'List available elections.',  (y) => {
 
   output('\nAvailable elections:', '\n');
   _.each(elections, (election, k) => {
-    if (k.match(/[0-9]+/)) {
-      output('', lSymbols.dot, k);
+    if (k.match(/[0-9]+/) && _.isPlainObject(election)) {
+      let attrs = _.filter([
+        election.primary ? 'primary' : null,
+        election.special ? 'special' : null,
+        election.supplement ? 'supplemented' : null,
+      ]).join(', ');
+      output('', lSymbols.dot, k, attrs ? '(' + attrs + ')' : '');
     }
   });
   output('');

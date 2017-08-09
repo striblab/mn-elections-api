@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Compiling manual results and results from the MN Secretary of State to make a static \"API\"",
   "main": "index.js",
+  "bin": {
+    "mn-elections": "./bin/mn-elections"
+  },
   "scripts": {
     "test": "jest"
   },
