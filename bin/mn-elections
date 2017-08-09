@@ -9,31 +9,49 @@
 require('dotenv').load();
 const command = require('yargs');
 const path = require('path');
+const fs = require('fs');
 const _ = require('lodash');
 const mkdirp = require('mkdirp');
+const lSymbols = require('log-symbols');
+const ora = require('ora');
+const inquirer = require('inquirer');
+
 const Election = require('../lib/election.js');
-const elections = require('../elections.json');
 const debug = require('debug')('mn-elections-api:cmd');
+
+// Add some more symbols
+lSymbols.dot = 'º';
+
 
 // Set up command line
 command.usage('\nUsage:\n  $0 <cmd> [args]');
 
 // General debug option
 command.option('debug', {
+  alias: 'd',
   describe: 'Turn on debugging.',
   type: 'boolean'
+});
+
+// Elections JSON location
+command.option('config', {
+  alias: 'c',
+  describe: 'Location of JSON describing elections.',
+  type: 'string',
+  demandOption: true,
+  default: path.join(__dirname, '..', 'elections.json')
 });
 
 // Common options, but specific to command
 let common = {
   election: {
-    alias: 'election',
+    alias: 'e',
     demandOption: true,
     describe: 'Election ID to use. To see all possible elections, use the `list` command.',
     type: 'string'
   },
   output: {
-    alias: 'output',
+    alias: 'o',
     demandOption: true,
     describe: 'Path to output election to.',
     type: 'string',
@@ -45,26 +63,33 @@ let common = {
 command.command('list', 'List available elections.',  (y) => {
   return y.usage('\nList usage:\n  $0 list');
 },  (y) => {
+  let elections = getElections(y);
   updateDebug(y);
 
+  output('\nAvailable elections:', '\n');
   _.each(elections, (election, k) => {
     if (k.match(/[0-9]+/)) {
-      output(k);
+      output('', lSymbols.dot, k);
     }
   });
+  output('');
 });
 
 // Results command
 command.command('results', 'Get results for an election.', (y) => {
-  return y.usage('\nResults usage:\n  $0 results -e <election> -o <output> [args]')
-    .option('e', common.election)
-    .option('o', common.output);
-},  (y) => {
+  return y.usage('\nResults usage:\n  $0 results -e <election> [args]')
+    .option('election', common.election)
+    .option('output', common.output);
+}, async (y) => {
+  let elections = getElections(y);
   updateDebug(y);
   checkElection(y);
 
   // Check id in election
   elections[y.election].id = elections[y.election].id || y.election;
+
+  output('\nCompiling election results for "' + y.election + '":', '\n');
+  let spinCreate = ora('Loading election').start();
 
   // Create election object
   let e;
@@ -72,30 +97,122 @@ command.command('results', 'Get results for an election.', (y) => {
     e = new Election(elections[y.election], {
       exportPath: path.join(y.output, y.election)
     });
+    spinCreate.succeed();
   }
   catch (e) {
+    spinCreate.fail();
     debug(e);
     error('Error trying to create election "' + y.election + '"');
   }
 
   // Fetch
+  let spinFetch = ora('Fetching results').start();
   try {
-    e.fetchResults();
+    await e.fetchResults();
+    spinFetch.succeed();
+    output('');
   }
   catch (e) {
+    spinFetch.fail();
     debug(e);
     error('Error trying fetch results for election "' + y.election + '"');
   }
 });
 
+// Setup supplement
+command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
+  return y.usage('\nResults usage:\n  $0 setup -e <election> [args]')
+    .option('election', common.election)
+    .option('output', common.output);
+}, async (y) => {
+  let elections = getElections(y);
+  updateDebug(y);
+  checkElection(y);
 
+  // Check id in election
+  elections[y.election].id = elections[y.election].id || y.election;
+
+  // Title
+  output('\nSetup supplement datasource for "' + y.election + '" at Airtable "' + elections[y.election].supplement.id + '":', '\n');
+
+  // Confirm
+  try {
+    let answers = await inquirer.prompt([{
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Setup will not overwrite any rows in the datasource, but \nwill create new data.  Are you sure?',
+      default: true
+    }]);
+    if (!answers.confirm) {
+      error('Exiting.');
+    }
+
+    output('');
+  }
+  catch (e) {
+    debug(e);
+    error('Exiting.');
+  }
+
+  // Create election object
+  let spinCreate = ora('Loading election').start();
+  let e;
+  try {
+    e = new Election(elections[y.election], {
+      exportPath: path.join(y.output, y.election)
+    });
+    spinCreate.succeed();
+  }
+  catch (e) {
+    spinCreate.fail();
+    debug(e);
+    error('Error trying to create election "' + y.election + '"');
+  }
+
+  // Fetch
+  let spinFetch = ora('Fetching results').start();
+  try {
+    await e.fetchResults();
+    spinFetch.succeed();
+  }
+  catch (e) {
+    spinFetch.fail();
+    debug(e);
+    error('Error trying fetch results for election "' + y.election + '"');
+  }
+
+  // Fetch
+  let spinSetup = ora('Setting up datasource.').start();
+  try {
+    await e.setupSupplement();
+    spinSetup.succeed();
+    output('');
+  }
+  catch (e) {
+    spinSetup.fail();
+    debug(e);
+    error('Error trying to setup datasource for election "' + y.election + '"');
+  }
+});
 
 // Setup help and parse
 command.help().argv;
 
 
+
+// Get elections
+function getElections(y) {
+  if (!y.config || !fs.existsSync(path.resolve(y.config))) {
+    error('Unable to find elections JSON at: ' + y.config);
+  }
+
+  return require(y.config);
+}
+
 // Check election arguments
 function checkElection(y) {
+  let elections = getElections(y);
+
   // Check election
   if (!y.election || !elections[y.election]) {
     error('Election "' + y.election + '" not found; use the `list` command to see available elections.');
@@ -127,6 +244,6 @@ function output(...args) {
 
 // Error
 function error(...args) {
-  output(...args);
+  output(...['\n', lSymbols.error, ...args, '\n']);
   process.exit(1);
 }
