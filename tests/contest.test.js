@@ -241,7 +241,7 @@ describe('lib/contest | real input', () => {
       'MN;;;0108;U.S. Representative District 5;5;0403;Lee Bauer;;;DFL;236;236;1757;3.99;44024'
     ];
     let props = {
-      type: 'congress'
+      type: 'us-house'
     };
     let e = mockE({
       id: 'TEST',

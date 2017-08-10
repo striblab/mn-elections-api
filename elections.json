@@ -378,7 +378,7 @@
       "dir": "20170214"
     },
     "results": [
-      { "file": "LegislativeByDistrict.txt", "type": "state-house "}
+      { "file": "LegislativeByDistrict.txt", "type": "state-house" }
     ],
     "meta": {
       "districts": [
@@ -392,4 +392,29 @@
     }
   },
 
+  "20170808": {
+    "primary": true,
+    "sos": {
+      "host": "ftp.sos.state.mn.us",
+      "dir": "20170808"
+    },
+    "results": [
+      { "file": "local.txt", "type": "local"},
+      { "file": "SchoolQuestions.txt", "type": "school"}
+    ],
+    "meta": {
+      "districts": [
+        { "file": "Cntytbl.txt", "type": "county" },
+        { "file": "PrctTbl.txt", "type": "precinct" },
+        { "file": "SchoolDistTbl.txt", "type": "school" }
+      ],
+      "questions": [
+        { "file": "BallotQuestions.txt", "type": "questions" }
+      ]
+    },
+    "supplement": {
+      "type": "airtable",
+      "id": "app60S7V5czO2ENhb"
+    }
+  }
 }

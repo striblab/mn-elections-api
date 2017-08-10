@@ -17,6 +17,7 @@ const ora = require('ora');
 const inquirer = require('inquirer');
 
 const Election = require('../lib/election.js');
+const verify = require('../lib/verify.js');
 const debug = require('debug')('mn-elections-api:cmd');
 
 // Add some more symbols
@@ -126,7 +127,7 @@ command.command('results', 'Get results for an election.', (y) => {
 
 // Setup supplement
 command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
-  return y.usage('\nResults usage:\n  $0 setup -e <election> [args]')
+  return y.usage('\nSetup supplement usage:\n  $0 setup -e <election> [args]')
     .option('election', common.election)
     .option('output', common.output);
 }, async (y) => {
@@ -200,6 +201,36 @@ command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
   }
 });
 
+// Verify
+command.command('verify', 'Verify results from SoS with independent counts.', (y) => {
+  return y.usage('\nVerify usage:\n  $0 verify -e <election> [args]')
+    .option('election', common.election);
+}, async (y) => {
+  let elections = getElections(y);
+  updateDebug(y);
+  checkElection(y);
+
+  // Check id in election
+  let e = elections[y.election];
+  e.id = e.id || y.election;
+  e.sos.user = e.sos.user || process.env.SOS_FTP_USER;
+  e.sos.password = e.sos.pass || process.env.SOS_FTP_PASS;
+
+  // Title
+  output('\nVerify results for "' + y.election + '"', '\n');
+
+  // Confirm
+  try {
+    let results = await verify(e.sos, e.results);
+    console.log(results);
+    output('');
+  }
+  catch (e) {
+    debug(e);
+    error('Exiting.');
+  }
+});
+
 // Setup help and parse
 command.help().argv;
 
@@ -224,13 +255,15 @@ function checkElection(y) {
   }
 
   // Check output
-  let output = path.resolve(y.output);
-  try {
-    mkdirp.sync(output);
-  }
-  catch (e) {
-    debug(e);
-    error('Error trying to create output directory "' + output + '"');
+  if (y.output) {
+    let output = path.resolve(y.output);
+    try {
+      mkdirp.sync(output);
+    }
+    catch (e) {
+      debug(e);
+      error('Error trying to create output directory "' + output + '"');
+    }
   }
 }
 

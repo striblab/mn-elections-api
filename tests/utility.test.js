@@ -72,3 +72,24 @@ describe('lib/utility | makeID', () => {
     expect(utility.makeID(['camelCase', 'a', 'CAMELCASE'])).toBe('camel-case-a-camelcase');
   });
 });
+
+// titleCase function
+describe('lib/utility | titleCase', () => {
+  test('non-strings should return themselves', () => {
+    expect(utility.titleCase(null)).toBe(null);
+    expect(utility.titleCase(undefined)).toBe(undefined);
+    expect(utility.titleCase(true)).toBe(true);
+    expect(utility.titleCase(1)).toBe(1);
+    expect(utility.titleCase({ a: 'b' })).toEqual({ a: 'b' });
+  });
+
+  test('handles strings', () => {
+    expect(utility.titleCase('a')).toBe('A');
+    expect(utility.titleCase('a thing')).toBe('A Thing');
+    expect(utility.titleCase('A THING')).toBe('A Thing');
+    expect(utility.titleCase('an ISD #123')).toBe('An ISD #123');
+    expect(utility.titleCase('thing iii')).toBe('Thing III');
+    expect(utility.titleCase('thing iv')).toBe('Thing IV');
+    expect(utility.titleCase('dISTRICT 36a')).toBe('District 36A');
+  });
+});
