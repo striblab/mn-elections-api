@@ -121,12 +121,34 @@ command.command('results', 'Get results for an election.', (y) => {
   try {
     await e.fetchResults();
     spinFetch.succeed();
-    output('');
   }
   catch (e) {
     spinFetch.fail();
     debug(e);
     error('Error trying fetch results for election "' + y.election + '"');
+  }
+
+  // Verify
+  let spinVerify = ora('Verifying results').start();
+  try {
+    let issue = e.verify();
+    if (issue === true) {
+      spinVerify.succeed();
+      output('');
+    }
+    else if (issue === false) {
+      spinVerify.warn('No contest counts provided in config JSON.');
+      output('');
+    }
+    else {
+      spinVerify.fail();
+      error(issue);
+    }
+  }
+  catch (e) {
+    spinVerify.fail();
+    debug(e);
+    error('Error verifying results for election "' + y.election + '"');
   }
 });
 

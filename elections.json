@@ -287,11 +287,15 @@
     "results": [
       {
         "file": "local.txt",
-        "type": "local"
+        "type": "local",
+        "contests": 3,
+        "candidates": 12
       },
       {
         "file": "sdraceQuesions.txt",
-        "type": "school"
+        "type": "school",
+        "contests": 5,
+        "candidates": 19
       }
     ],
     "meta": {
@@ -323,7 +327,8 @@
     "supplement": {
       "type": "airtable",
       "id": "appa5Wr2e77CZ5oRM"
-    }
+    },
+    "id": "20150811"
   },
   "20150929": {
     "primary": true,
