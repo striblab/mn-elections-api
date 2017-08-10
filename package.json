@@ -25,6 +25,7 @@
     "debug": "^2.6.8",
     "dev-null": "^0.1.1",
     "dotenv": "^4.0.0",
+    "easy-table": "^1.1.0",
     "ftp": "^0.3.10",
     "inquirer": "^3.2.1",
     "join-stream": "0.0.0",

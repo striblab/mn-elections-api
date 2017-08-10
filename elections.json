@@ -1,8 +1,4 @@
 {
-  "notes": "This JSON describes each election and should be keyed by the YYYYMMDD of the election, see spec/ELECTION.md",
-
-
-
   "20131105": {
     "notes": "The SoS does not have any ballot question text",
     "sos": {
@@ -10,27 +6,52 @@
       "dir": "20131105_MG"
     },
     "results": [
-      { "file": "local.txt", "type": "local" },
-      { "file": "cntyRaces.txt", "type": "county" },
-      { "file": "sdraceQuesions.txt", "type": "school" }
+      {
+        "file": "local.txt",
+        "type": "local",
+        "hasRankedChoice": true,
+        "contests": 96,
+        "candidates": 373
+      },
+      {
+        "file": "cntyRaces.txt",
+        "type": "county",
+        "contests": 2,
+        "candidates": 10
+      },
+      {
+        "file": "sdraceQuesions.txt",
+        "type": "school",
+        "contests": 158,
+        "candidates": 527
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "MunTbl.txt", "type": "local" },
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "MunTbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ]
     },
     "supplement": {
       "type": "airtable",
       "id": "apphaNpEdQoYCeh0S"
-    }
+    },
+    "id": "20131105"
   },
-
-
-
-
   "20140429": {
     "primary": true,
     "special": true,
@@ -39,12 +60,21 @@
       "dir": "20140429_SP"
     },
     "results": [
-      { "file": "cntyRaces.txt", "type": "county" }
+      {
+        "file": "cntyRaces.txt",
+        "type": "county"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ]
     },
     "supplement": {
@@ -52,7 +82,6 @@
       "id": "appAmh2DOHgacZkAR"
     }
   },
-
   "20140513": {
     "special": true,
     "sos": {
@@ -60,12 +89,21 @@
       "dir": "20140513_SE"
     },
     "results": [
-      { "file": "cntyRaces.txt", "type": "county" }
+      {
+        "file": "cntyRaces.txt",
+        "type": "county"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ]
     },
     "supplement": {
@@ -73,7 +111,6 @@
       "id": "appdsbcM5D6kuGRcz"
     }
   },
-
   "20140812": {
     "primary": true,
     "sos": {
@@ -81,24 +118,69 @@
       "dir": "20140812"
     },
     "results": [
-      { "file": "attorneygen.txt", "type": "state" },
-      { "file": "auditor.txt", "type": "state" },
-      { "file": "cntyRaceQuestions.txt", "type": "county" },
-      { "file": "Governor.txt", "type": "state" },
-      { "file": "judicialdst.txt", "type": "judicial-district" },
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" },
-      { "file": "local.txt", "type": "local" },
-      { "file": "sdraceQuesions.txt", "type": "school" },
-      { "file": "secofstate.txt", "type": "state" },
-      { "file": "ushouse.txt", "type": "us-house" },
-      { "file": "ussenate.txt", "type": "us-senate" }
+      {
+        "file": "attorneygen.txt",
+        "type": "state"
+      },
+      {
+        "file": "auditor.txt",
+        "type": "state"
+      },
+      {
+        "file": "cntyRaceQuestions.txt",
+        "type": "county"
+      },
+      {
+        "file": "Governor.txt",
+        "type": "state"
+      },
+      {
+        "file": "judicialdst.txt",
+        "type": "judicial-district"
+      },
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "sdraceQuesions.txt",
+        "type": "school"
+      },
+      {
+        "file": "secofstate.txt",
+        "type": "state"
+      },
+      {
+        "file": "ushouse.txt",
+        "type": "us-house"
+      },
+      {
+        "file": "ussenate.txt",
+        "type": "us-senate"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "MunTbl.txt", "type": "local" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "MunTbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ]
     },
     "supplement": {
@@ -106,36 +188,89 @@
       "id": "appr9Xmu7MnN1BtrN"
     }
   },
-
   "20141104": {
     "sos": {
       "host": "ftp.sos.state.mn.us",
       "dir": "20141104"
     },
     "results": [
-      { "file": "attorneygen.txt", "type": "state" },
-      { "file": "auditor.txt", "type": "state" },
-      { "file": "cntyRaceQuestions.txt", "type": "county" },
-      { "file": "Governor.txt", "type": "state" },
-      { "file": "hospital.txt", "type": "hospital" },
-      { "file": "judicial.txt", "type": "judicial" },
-      { "file": "judicialdst.txt", "type": "judicial-district" },
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" },
-      { "file": "local.txt", "type": "local" },
-      { "file": "sdraceQuesions.txt", "type": "school" },
-      { "file": "secofstate.txt", "type": "state" },
-      { "file": "ushouse.txt", "type": "us-house" },
-      { "file": "ussenate.txt", "type": "us-senate" }
+      {
+        "file": "attorneygen.txt",
+        "type": "state"
+      },
+      {
+        "file": "auditor.txt",
+        "type": "state"
+      },
+      {
+        "file": "cntyRaceQuestions.txt",
+        "type": "county"
+      },
+      {
+        "file": "Governor.txt",
+        "type": "state"
+      },
+      {
+        "file": "hospital.txt",
+        "type": "hospital"
+      },
+      {
+        "file": "judicial.txt",
+        "type": "judicial"
+      },
+      {
+        "file": "judicialdst.txt",
+        "type": "judicial-district"
+      },
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "sdraceQuesions.txt",
+        "type": "school"
+      },
+      {
+        "file": "secofstate.txt",
+        "type": "state"
+      },
+      {
+        "file": "ushouse.txt",
+        "type": "us-house"
+      },
+      {
+        "file": "ussenate.txt",
+        "type": "us-senate"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "MunTbl.txt", "type": "local" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "MunTbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -143,11 +278,6 @@
       "id": "appsMvLunBr01069k"
     }
   },
-
-
-
-
-
   "20150811": {
     "primary": true,
     "sos": {
@@ -155,18 +285,39 @@
       "dir": "20150811"
     },
     "results": [
-      { "file": "local.txt", "type": "local" },
-      { "file": "sdraceQuesions.txt", "type": "school" }
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "sdraceQuesions.txt",
+        "type": "school"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "MunTbl.txt", "type": "local" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "MunTbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -174,7 +325,6 @@
       "id": "appa5Wr2e77CZ5oRM"
     }
   },
-
   "20150929": {
     "primary": true,
     "special": true,
@@ -183,12 +333,21 @@
       "dir": "20150929"
     },
     "results": [
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" }
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ]
     },
     "supplement": {
@@ -196,26 +355,49 @@
       "id": "appFSb7GhpqMk1WIn"
     }
   },
-
   "20151103": {
     "sos": {
       "host": "ftp.sos.state.mn.us",
       "dir": "20151103"
     },
     "results": [
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" },
-      { "file": "local.txt", "type": "local" },
-      { "file": "sdraceQuesions.txt", "type": "school" }
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "sdraceQuesions.txt",
+        "type": "school"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "MunTbl.txt", "type": "local" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "MunTbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -223,7 +405,6 @@
       "id": "app0SkAPyGsdBYvzT"
     }
   },
-
   "20151208": {
     "special": true,
     "sos": {
@@ -231,16 +412,31 @@
       "dir": "20151208_SP"
     },
     "results": [
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" },
-      { "file": "SchoolQuestions.txt", "type": "school" }
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "SchoolQuestions.txt",
+        "type": "school"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -248,12 +444,6 @@
       "id": "appGnDHxrGCcDYtmE"
     }
   },
-
-
-
-
-
-
   "20160112": {
     "primary": true,
     "special": true,
@@ -262,12 +452,21 @@
       "dir": "20160112_SP"
     },
     "results": [
-      { "file": "stsenate.txt", "type": "state-senate" }
+      {
+        "file": "stsenate.txt",
+        "type": "state-senate"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ]
     },
     "supplement": {
@@ -275,7 +474,6 @@
       "id": "app82a1BtNf1LTnmp"
     }
   },
-
   "20160209": {
     "special": true,
     "sos": {
@@ -283,13 +481,25 @@
       "dir": "20160209_SE"
     },
     "results": [
-      { "file": "LegislativeByDistrict.txt", "type": "state-house "},
-      { "file": "stsenate.txt", "type": "state-senate" }
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house "
+      },
+      {
+        "file": "stsenate.txt",
+        "type": "state-senate"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ]
     },
     "supplement": {
@@ -297,7 +507,6 @@
       "id": "appFRXZex04tFEjNe"
     }
   },
-
   "20160809": {
     "primary": true,
     "sos": {
@@ -305,24 +514,63 @@
       "dir": "20160809"
     },
     "results": [
-      { "file": "cntyRaces.txt", "type": "county" },
-      { "file": "judicial.txt", "type": "judicial" },
-      { "file": "judicialdst.txt", "type": "judicial-district" },
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" },
-      { "file": "local.txt", "type": "local" },
-      { "file": "SDRaceQuestions.txt", "type": "school" },
-      { "file": "stsenate.txt", "type": "state-senate" },
-      { "file": "ushouse.txt", "type": "us-senate" }
+      {
+        "file": "cntyRaces.txt",
+        "type": "county"
+      },
+      {
+        "file": "judicial.txt",
+        "type": "judicial"
+      },
+      {
+        "file": "judicialdst.txt",
+        "type": "judicial-district"
+      },
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "SDRaceQuestions.txt",
+        "type": "school"
+      },
+      {
+        "file": "stsenate.txt",
+        "type": "state-senate"
+      },
+      {
+        "file": "ushouse.txt",
+        "type": "us-senate"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "mcdtbl.txt", "type": "local" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "mcdtbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -330,34 +578,81 @@
       "id": "appxF1v1roYrwPMxy"
     }
   },
-
   "20161108": {
     "sos": {
       "host": "ftp.sos.state.mn.us",
       "dir": "20161108"
     },
     "results": [
-      { "file": "USPres.txt", "type": "mn-president" },
-      { "file": "ConstAmend.txt", "type": "amendment" },
-      { "file": "ushouse.txt", "type": "us-house" },
-      { "file": "stsenate.txt", "type": "state-senate" },
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" },
-      { "file": "SDRaceQuestions.txt", "type": "school" },
-      { "file": "local.txt", "type": "local" },
-      { "file": "judicial.txt", "type": "judicial" },
-      { "file": "judicialdst.txt", "type": "judicial-district" },
-      { "file": "hospital.txt", "type": "hospital" },
-      { "file": "cntyRaceQuestions.txt", "type": "county" }
+      {
+        "file": "USPres.txt",
+        "type": "mn-president"
+      },
+      {
+        "file": "ConstAmend.txt",
+        "type": "amendment"
+      },
+      {
+        "file": "ushouse.txt",
+        "type": "us-house"
+      },
+      {
+        "file": "stsenate.txt",
+        "type": "state-senate"
+      },
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "SDRaceQuestions.txt",
+        "type": "school"
+      },
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "judicial.txt",
+        "type": "judicial"
+      },
+      {
+        "file": "judicialdst.txt",
+        "type": "judicial-district"
+      },
+      {
+        "file": "hospital.txt",
+        "type": "hospital"
+      },
+      {
+        "file": "cntyRaceQuestions.txt",
+        "type": "county"
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "mcdtbl.txt", "type": "local" },
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "mcdtbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -365,33 +660,41 @@
       "id": "appvtZ1ZODUBj3uhQ"
     }
   },
-
-
-
-
-
   "20170214": {
     "notes": "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
     "special": true,
     "sos": {
       "host": "ftp.sos.state.mn.us",
-      "dir": "20170214"
+      "dir": "20170214",
+      "user": "media",
+      "password": "results"
     },
     "results": [
-      { "file": "LegislativeByDistrict.txt", "type": "state-house" }
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house",
+        "contests": 1,
+        "candidates": 3
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        }
       ]
     },
     "supplement": {
       "type": "airtable",
       "id": "appVXzKJesxBpTsV9"
-    }
+    },
+    "id": "20170214"
   },
-
   "20170808": {
     "primary": true,
     "sos": {
@@ -399,22 +702,45 @@
       "dir": "20170808"
     },
     "results": [
-      { "file": "local.txt", "type": "local"},
-      { "file": "SchoolQuestions.txt", "type": "school"}
+      {
+        "file": "local.txt",
+        "type": "local",
+        "contests": 4,
+        "candidates": 14
+      },
+      {
+        "file": "SchoolQuestions.txt",
+        "type": "school",
+        "contests": 4,
+        "candidates": 8
+      }
     ],
     "meta": {
       "districts": [
-        { "file": "Cntytbl.txt", "type": "county" },
-        { "file": "PrctTbl.txt", "type": "precinct" },
-        { "file": "SchoolDistTbl.txt", "type": "school" }
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
       ],
       "questions": [
-        { "file": "BallotQuestions.txt", "type": "questions" }
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
       "type": "airtable",
       "id": "app60S7V5czO2ENhb"
-    }
+    },
+    "id": "20170808"
   }
 }

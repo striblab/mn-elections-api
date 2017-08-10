@@ -15,6 +15,7 @@ const mkdirp = require('mkdirp');
 const lSymbols = require('log-symbols');
 const ora = require('ora');
 const inquirer = require('inquirer');
+const Table = require('easy-table');
 
 const Election = require('../lib/election.js');
 const verify = require('../lib/verify.js');
@@ -68,17 +69,21 @@ command.command('list', 'List available elections.',  (y) => {
   updateDebug(y);
 
   output('\nAvailable elections:', '\n');
+
+  let data = [];
   _.each(elections, (election, k) => {
     if (k.match(/[0-9]+/) && _.isPlainObject(election)) {
-      let attrs = _.filter([
-        election.primary ? 'primary' : null,
-        election.special ? 'special' : null,
-        election.supplement ? 'supplemented' : null,
-      ]).join(', ');
-      output('', lSymbols.dot, k, attrs ? '(' + attrs + ')' : '');
+      data.push({
+        id: k,
+        general: !election.primary && !election.special ? lSymbols.success : undefined,
+        primary: election.primary ? lSymbols.success : undefined,
+        special: election.special ? lSymbols.success : undefined,
+        supplemented: election.supplement ? lSymbols.success : undefined
+      });
     }
   });
-  output('');
+
+  output(Table.print(data));
 });
 
 // Results command
@@ -204,7 +209,13 @@ command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
 // Verify
 command.command('verify', 'Verify results from SoS with independent counts.', (y) => {
   return y.usage('\nVerify usage:\n  $0 verify -e <election> [args]')
-    .option('election', common.election);
+    .option('election', common.election)
+    .option('update', {
+      alias: 'u',
+      describe: 'Update the config JSON with found values.',
+      type: 'confirm',
+      default: false
+    });
 }, async (y) => {
   let elections = getElections(y);
   updateDebug(y);
@@ -213,21 +224,39 @@ command.command('verify', 'Verify results from SoS with independent counts.', (y
   // Check id in election
   let e = elections[y.election];
   e.id = e.id || y.election;
-  e.sos.user = e.sos.user || process.env.SOS_FTP_USER;
-  e.sos.password = e.sos.pass || process.env.SOS_FTP_PASS;
 
   // Title
   output('\nVerify results for "' + y.election + '"', '\n');
 
-  // Confirm
+  // Confirm if update
+  if (y.update) {
+    let answers = await inquirer.prompt([{
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Updating will overwrite your config JSON. Are you sure you want to do this?',
+      default: false
+    }]);
+    output('');
+
+    if (!answers.confirm) {
+      error('Exiting.');
+    }
+  }
+
+  // Verify
   try {
     let results = await verify(e.sos, e.results);
-    console.log(results);
-    output('');
+    output(Table.print(results));
+
+    // Update
+    if (y.update) {
+      e.results = results;
+      fs.writeFileSync(path.resolve(y.config), JSON.stringify(elections, null, '  '));
+    }
   }
   catch (e) {
     debug(e);
-    error('Exiting.');
+    error('Issue with getting or saving verification results for election "' + y.election + '"');
   }
 });
 
