@@ -89,8 +89,18 @@ The following describes the fields for an Election object.
     // The type of data source. Currently, only "airtable" is supported.
     type: "airtable",
 
-    // The ID of the data source.
+    // The ID of the data source.  Note that this is found when navigating
+    // the [Airtable API](https://airtable.com/api)
     id: "apphaNpEdQoYCeh0S"
+  },
+
+  // Object to define sets of contests for specific endpoints.  The endpoint
+  // will be results/set-"key".json
+  sets: {
+    dashboard: [
+      '20170808-xxxxxxx',
+      '20170808-yyyyyyy'
+    ]
   },
 
   // Any extra notes about the election

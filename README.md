@@ -13,26 +13,76 @@ Data comes in from a few places.
 
 After getting compiled and processed, the results and other data get split up into files and published to S3.
 
-## Usage
+## Creating the API
 
-### Creating API
+### Command line usage
 
-(coming soon, should be something like:)
+This package exposes `mn-elections` command line utility.
 
-`mn-elections fetch results && mn-elections publish results`
+```
+Usage:
+  mn-elections <cmd> [args]
 
-Environment variables:
+Commands:
+  list     List available elections.
+  results  Get results for an election.
+  setup    Setup supplement datasource (Airtable).
+  verify   Verify results from SoS with independent counts.
 
-* `SOS_FTP_USER`
-* `SOS_FTP_PASS`
-* `AIRTABLE_API_KEY`
-* `AIRTABLE_BASE_ID`
+Options:
+  --debug, -d   Turn on debugging.
+  --config, -c  Location of JSON describing elections.  Defaults to
+                elections.json provided here.
+  --help        Show help
+```
 
-### Using API
+Common options:
 
-(coming soon)
+* `--election`: Most, but not all commands, require the election to be defined with this option, which should be the election ID, which is the date of the election, like `20131105`.
+* `--debug`: This does not currently work.  This should turn on debugging.
+* `--config`: Path to where the `elections.json` is.  By default it is the one provided in this package, which should be good enough for most cases.  To make your own config, see the `spec/ELECTION.md` specification.
+* `--help`: Specific help can be provided for each sub-command.
 
-For specs on common objects in the API, see the `spec/` folder.
+#### `list` command
+
+This lists and describes all elections defined in the `elections.json` (or whatever JSON is provided).  This is helpful as it will give you the election ID that is needed for most operations.
+
+#### `results` command
+
+This gets the results from the SoS and supplemental sources if defined in the election JSON.  Basic usage is something like the following:
+
+```
+mn-elections results -e 20131105
+```
+
+By default it will save the results under the `./mn-elections-output/20131105/` folder.  The `--output` option can change the directory.  Note that the `mn-elections` command will automatically append the election ID, such as `20131105`, to the path.
+
+#### `setup` command
+
+`setup` will setup the supplemental source, i.e. the Airtable, with the contests from the election.  Unfortunately it is necessary to setup the tables and columns in the Airtable Base manually.
+
+*TODO: Provide documentation on how to setup the Airtable.  Currently, I just duplicated the existing one.*
+
+Basic usage is something like the following:
+
+```
+mn-elections setup -e 20131105
+```
+
+Since this runs the results command above, the `--output` option can be set.
+
+#### `verify` command
+
+This command looks at the Secretary of State files provided in the `results` array in the elections JSON and does a similar, but independent and fast count of contests and candidates and can optionally update the elections JSON with those numbers.  These numbers are used as simple verification when the `results` command runs.
+
+Use the `--update` option to update the elections JSON.
+
+
+### Environment variables:
+
+* `SOS_FTP_USER`: The FTP username to access to Secretary of State FTP site.
+* `SOS_FTP_PASS`: The FTP password to access to Secretary of State FTP site.
+* `AIRTABLE_API_KEY`: The API key for Airtable, which is where supplemental data is stored.
 
 ## Glossary
 

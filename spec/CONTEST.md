@@ -95,7 +95,7 @@ The following describes the fields for a Contest object.
   totalVotes: 1000,
 
   // Whether the contest is a tie or so close that a recount may happen
-  close: flase,
+  close: false,
 
   // Unix timestamp of last updated
   updated: 12345982374,

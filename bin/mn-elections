@@ -131,18 +131,18 @@ command.command('results', 'Get results for an election.', (y) => {
   // Verify
   let spinVerify = ora('Verifying results').start();
   try {
-    let issue = e.verify();
-    if (issue === true) {
+    let verified = e.verify();
+    if (verified === true) {
       spinVerify.succeed();
       output('');
     }
-    else if (issue === false) {
+    else if (verified === false) {
       spinVerify.warn('No contest counts provided in config JSON.');
       output('');
     }
     else {
       spinVerify.fail();
-      error(issue);
+      error(verified);
     }
   }
   catch (e) {
