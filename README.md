@@ -28,6 +28,7 @@ Commands:
   results  Get results for an election.
   setup    Setup supplement datasource (Airtable).
   verify   Verify results from SoS with independent counts.
+  publish  Publish results to S3.
 
 Options:
   --debug, -d   Turn on debugging.

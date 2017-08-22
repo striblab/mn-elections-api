@@ -19,6 +19,7 @@ const Table = require('easy-table');
 
 const Election = require('../lib/election.js');
 const verify = require('../lib/verify.js');
+const Publish = require('../lib/publish.js');
 const debug = require('debug')('mn-elections-api:cmd');
 
 // Add some more symbols
@@ -86,6 +87,8 @@ command.command('list', 'List available elections.',  (y) => {
   output(Table.print(data));
 });
 
+
+
 // Results command
 command.command('results', 'Get results for an election.', (y) => {
   return y.usage('\nResults usage:\n  $0 results -e <election> [args]')
@@ -151,6 +154,8 @@ command.command('results', 'Get results for an election.', (y) => {
     error('Error verifying results for election "' + y.election + '"');
   }
 });
+
+
 
 // Setup supplement
 command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
@@ -228,6 +233,8 @@ command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
   }
 });
 
+
+
 // Verify
 command.command('verify', 'Verify results from SoS with independent counts.', (y) => {
   return y.usage('\nVerify usage:\n  $0 verify -e <election> [args]')
@@ -281,6 +288,70 @@ command.command('verify', 'Verify results from SoS with independent counts.', (y
     error('Issue with getting or saving verification results for election "' + y.election + '"');
   }
 });
+
+
+
+// Publish
+command.command('publish', 'Publish results to S3.', (y) => {
+  return y.usage('\Publish usage:\n  $0 publish -e <election> -s <s3-path> [args]')
+    .option('election', common.election)
+    .option('output', common.output)
+    .option('s3', {
+      alias: 's',
+      describe: 'S3 URI to publish to, such as "s3://bucket/path/to/export".',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('version', {
+      alias: 'i',
+      describe: 'Whether to create export to a versioned path. This will append "_versions/TIMESTAMP" to the path.',
+      type: 'confirm',
+      default: false,
+    });
+}, async (y) => {
+  let elections = getElections(y);
+  updateDebug(y);
+  checkElection(y);
+
+  // Check id in election
+  let e = elections[y.election];
+  e.id = e.id || y.election;
+
+  // Title
+  output('\nPublish results for "' + y.election + '"', '\n');
+
+  // Create election object
+  let spinCreate = ora('Loading election').start();
+  try {
+    e = new Election(elections[y.election], {
+      exportPath: path.join(y.output, y.election)
+    });
+    spinCreate.succeed();
+  }
+  catch (e) {
+    spinCreate.fail();
+    debug(e);
+    error('Error trying to create election "' + y.election + '"');
+  }
+
+  // Publish
+  let publishCreate = ora('Publishing election').start();
+  try {
+    let p = new Publish(e, {
+      exportPath: path.join(y.output, y.election),
+      s3Location: y.s3
+    });
+    await p.publish(y.version);
+    publishCreate.succeed();
+  }
+  catch (e) {
+    publishCreate.fail();
+    debug(e);
+    error('Issue with publishing results for election: "' + y.election + '"');
+  }
+});
+
+
 
 // Setup help and parse
 command.help().argv;
