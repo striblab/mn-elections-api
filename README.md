@@ -58,6 +58,18 @@ mn-elections results -e 20131105
 
 By default it will save the results under the `./mn-elections-output/20131105/` folder.  The `--output` option can change the directory.  Note that the `mn-elections` command will automatically append the election ID, such as `20131105`, to the path.
 
+#### `publish` command
+
+Publish results to S3.  Basic usage is something like:
+
+```
+mn-elections -e 20131105 -s s3://bucket-name/path/to/elections
+```
+
+This will put the results to the bucket `bucket-name` at path `path/to/elections/20131105`.
+
+The `--output` option can be used to specific where the local results are stored (see `results` command).  The `--version` flag will put the results in a timestamp path, for example: `path/to/elections/20131105/_versions/UNIX_TIMESTAMP`.
+
 #### `setup` command
 
 `setup` will setup the supplemental source, i.e. the Airtable, with the contests from the election.  Unfortunately it is necessary to setup the tables and columns in the Airtable Base manually.
