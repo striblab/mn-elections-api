@@ -353,6 +353,63 @@ command.command('publish', 'Publish results to S3.', (y) => {
 
 
 
+
+// Print command
+command.command('print', 'Get results for an election and print out saxotech-style.', (y) => {
+  return y.usage('\nPrint usage:\n  $0 print -e <election> [args]')
+    .option('election', common.election)
+    .option('output', common.output);
+}, async (y) => {
+  let elections = getElections(y);
+  updateDebug(y);
+  checkElection(y);
+
+  // Check id in election
+  elections[y.election].id = elections[y.election].id || y.election;
+
+  output('\nCompiling election results for "' + y.election + '":', '\n');
+  let spinCreate = ora('Loading election').start();
+
+  // Create election object
+  let e;
+  try {
+    e = new Election(elections[y.election], {
+      exportPath: path.join(y.output, y.election)
+    });
+    spinCreate.succeed();
+  }
+  catch (e) {
+    spinCreate.fail();
+    debug(e);
+    error('Error trying to create election "' + y.election + '"');
+  }
+
+  // Fetch
+  let spinFetch = ora('Fetching results').start();
+  try {
+    await e.fetchResults();
+    spinFetch.succeed();
+  }
+  catch (e) {
+    spinFetch.fail();
+    debug(e);
+    error('Error trying fetch results for election "' + y.election + '"');
+  }
+
+  // Verify
+  output('Printing... \n\n');
+  try {
+    process.stdout.write(e.exportPrint());
+  }
+  catch (e) {
+    debug(e);
+    error('Error printing results for election "' + y.election + '"');
+  }
+});
+
+
+
+
 // Setup help and parse
 command.help().argv;
 
