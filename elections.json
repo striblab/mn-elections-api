@@ -766,5 +766,56 @@
       "id": "app60S7V5czO2ENhb"
     },
     "id": "20170808"
+  },
+  "20171107": {
+    "id": "20171107",
+    "sos": {
+      "host": "ftp.sos.state.mn.us",
+      "dir": "20171107"
+    },
+    "results": [
+      {
+        "file": "local.txt",
+        "type": "local",
+        "hasRankedChoice": true,
+        "contests": 75,
+        "candidates": 305
+      },
+      {
+        "file": "SDRaceQuestions.txt",
+        "type": "school",
+        "contests": 165,
+        "candidates": 516
+      }
+    ],
+    "meta": {
+      "districts": [
+        {
+          "file": "MunTbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
+      ]
+    },
+    "supplement": {
+      "type": "airtable",
+      "id": "apppQbnHjRq6W3xPc"
+    },
+    "sets": {
+      "dashboard": [
+        "20171107-local-43000-2001"
+      ]
+    }
   }
 }
