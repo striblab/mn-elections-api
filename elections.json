@@ -777,16 +777,11 @@
     "results": [
       {
         "file": "local.txt",
-        "type": "local",
-        "hasRankedChoice": true,
-        "contests": 75,
-        "candidates": 305
+        "type": "local"
       },
       {
         "file": "SDRaceQuestions.txt",
-        "type": "school",
-        "contests": 165,
-        "candidates": 516
+        "type": "school"
       }
     ],
     "meta": {
