@@ -15,6 +15,11 @@ The following describes the fields for a Contest object.
   election: { ... },
   candidates: [ ... ],
 
+  // Whether this is a special election.  This is also defined on the election
+  // level, but sometimes special elections happen on regularly scheduled
+  // elections
+  special: false,
+
   // The ID of the district for the contest. The district being relative
   // to the contest type
   district: '1234',
@@ -30,6 +35,12 @@ The following describes the fields for a Contest object.
 
   // The descriptive name of the area of the contest.
   area: 'Minneapolis',
+
+  // The sub-division of the area, such as council member ward.
+  subArea: 'Ward 2',
+
+  // Seat name, such as Council Member A
+  seatName: 'A',
 
   // Other district codes that may be attached for reference, and determined
   // from district and type
