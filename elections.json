@@ -810,6 +810,33 @@
     },
     "sets": {
       "dashboard": ["20171107-local-43000-2001"]
-    }
+    },
+    "print": [
+      {
+        "title": "Minneapolis races",
+        "where": { "area": "^Minneapolis$" },
+        "headings": ["name", "subArea"]
+      },
+      {
+        "title": "St. Paul races",
+        "where": { "area": "^St\\. Paul$" },
+        "headings": ["name", "subArea"]
+      },
+      {
+        "title": "Suburban races",
+        "where": { "group": "^Suburban$" },
+        "headings": ["area", "name", "subArea"]
+      },
+      {
+        "title": "School board races",
+        "where": { "name": "school board" },
+        "headings": ["area", null, "subArea"]
+      },
+      {
+        "title": "School referendums",
+        "where": { "question": true, "name": "school" },
+        "headings": ["area", null, "seatName"]
+      }
+    ]
   }
 }

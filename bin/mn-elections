@@ -4,7 +4,6 @@
  * Main command line app.
  */
 
-
 // Dependencies
 require('dotenv').load();
 const command = require('yargs');
@@ -24,7 +23,6 @@ const debug = require('debug')('mn-elections-api:cmd');
 
 // Add some more symbols
 lSymbols.dot = 'º';
-
 
 // Set up command line
 command.usage('\nUsage:\n  $0 <cmd> [args]');
@@ -50,7 +48,8 @@ let common = {
   election: {
     alias: 'e',
     demandOption: true,
-    describe: 'Election ID to use. To see all possible elections, use the `list` command.',
+    describe:
+      'Election ID to use. To see all possible elections, use the `list` command.',
     type: 'string'
   },
   output: {
@@ -63,357 +62,402 @@ let common = {
 };
 
 // List command
-command.command('list', 'List available elections.',  (y) => {
-  return y.usage('\nList usage:\n  $0 list');
-},  (y) => {
-  let elections = getElections(y);
-  updateDebug(y);
+command.command(
+  'list',
+  'List available elections.',
+  y => {
+    return y.usage('\nList usage:\n  $0 list');
+  },
+  y => {
+    let elections = getElections(y);
+    updateDebug(y);
 
-  output('\nAvailable elections:', '\n');
+    output('\nAvailable elections:', '\n');
 
-  let data = [];
-  _.each(elections, (election, k) => {
-    if (k.match(/[0-9]+/) && _.isPlainObject(election)) {
-      data.push({
-        id: k,
-        general: !election.primary && !election.special ? lSymbols.success : undefined,
-        primary: election.primary ? lSymbols.success : undefined,
-        special: election.special ? lSymbols.success : undefined,
-        supplemented: election.supplement ? lSymbols.success : undefined
-      });
-    }
-  });
+    let data = [];
+    _.each(elections, (election, k) => {
+      if (k.match(/[0-9]+/) && _.isPlainObject(election)) {
+        data.push({
+          id: k,
+          general:
+            !election.primary && !election.special
+              ? lSymbols.success
+              : undefined,
+          primary: election.primary ? lSymbols.success : undefined,
+          special: election.special ? lSymbols.success : undefined,
+          supplemented: election.supplement ? lSymbols.success : undefined
+        });
+      }
+    });
 
-  output(Table.print(data));
-});
-
-
+    output(Table.print(data));
+  }
+);
 
 // Results command
-command.command('results', 'Get results for an election.', (y) => {
-  return y.usage('\nResults usage:\n  $0 results -e <election> [args]')
-    .option('election', common.election)
-    .option('output', common.output);
-}, async (y) => {
-  let elections = getElections(y);
-  updateDebug(y);
-  checkElection(y);
+command.command(
+  'results',
+  'Get results for an election.',
+  y => {
+    return y
+      .usage('\nResults usage:\n  $0 results -e <election> [args]')
+      .option('election', common.election)
+      .option('output', common.output);
+  },
+  async y => {
+    let elections = getElections(y);
+    updateDebug(y);
+    checkElection(y);
 
-  // Check id in election
-  elections[y.election].id = elections[y.election].id || y.election;
+    // Check id in election
+    elections[y.election].id = elections[y.election].id || y.election;
 
-  output('\nCompiling election results for "' + y.election + '":', '\n');
-  let spinCreate = ora('Loading election').start();
+    output('\nCompiling election results for "' + y.election + '":', '\n');
+    let spinCreate = ora('Loading election').start();
 
-  // Create election object
-  let e;
-  try {
-    e = new Election(elections[y.election], {
-      exportPath: path.join(y.output, y.election)
-    });
-    spinCreate.succeed();
-  }
-  catch (e) {
-    spinCreate.fail();
-    debug(e);
-    error('Error trying to create election "' + y.election + '"');
-  }
-
-  // Fetch
-  let spinFetch = ora('Fetching results').start();
-  try {
-    await e.fetchResults();
-    spinFetch.succeed();
-  }
-  catch (e) {
-    spinFetch.fail();
-    debug(e);
-    error('Error trying fetch results for election "' + y.election + '"');
-  }
-
-  // Verify
-  let spinVerify = ora('Verifying results').start();
-  try {
-    let verified = e.verify();
-    if (verified === true) {
-      spinVerify.succeed();
-      output('');
+    // Create election object
+    let e;
+    try {
+      e = new Election(elections[y.election], {
+        exportPath: path.join(y.output, y.election)
+      });
+      spinCreate.succeed();
     }
-    else if (verified === false) {
-      spinVerify.warn('No contest counts provided in config JSON.');
-      output('');
+    catch (e) {
+      spinCreate.fail();
+      debug(e);
+      error('Error trying to create election "' + y.election + '"');
     }
-    else {
+
+    // Fetch
+    let spinFetch = ora('Fetching results').start();
+    try {
+      await e.fetchResults();
+      spinFetch.succeed();
+    }
+    catch (e) {
+      spinFetch.fail();
+      debug(e);
+      error('Error trying fetch results for election "' + y.election + '"');
+    }
+
+    // Verify
+    let spinVerify = ora('Verifying results').start();
+    try {
+      let verified = e.verify();
+      if (verified === true) {
+        spinVerify.succeed();
+        output('');
+      }
+      else if (verified === false) {
+        spinVerify.warn('No contest counts provided in config JSON.');
+        output('');
+      }
+      else {
+        spinVerify.fail();
+        error(verified);
+      }
+    }
+    catch (e) {
       spinVerify.fail();
-      error(verified);
+      debug(e);
+      error('Error verifying results for election "' + y.election + '"');
     }
   }
-  catch (e) {
-    spinVerify.fail();
-    debug(e);
-    error('Error verifying results for election "' + y.election + '"');
-  }
-});
-
-
+);
 
 // Setup supplement
-command.command('setup', 'Setup supplement datasource (Airtable).', (y) => {
-  return y.usage('\nSetup supplement usage:\n  $0 setup -e <election> [args]')
-    .option('election', common.election)
-    .option('output', common.output);
-}, async (y) => {
-  let elections = getElections(y);
-  updateDebug(y);
-  checkElection(y);
+command.command(
+  'setup',
+  'Setup supplement datasource (Airtable).',
+  y => {
+    return y
+      .usage('\nSetup supplement usage:\n  $0 setup -e <election> [args]')
+      .option('election', common.election)
+      .option('output', common.output);
+  },
+  async y => {
+    let elections = getElections(y);
+    updateDebug(y);
+    checkElection(y);
 
-  // Check id in election
-  elections[y.election].id = elections[y.election].id || y.election;
+    // Check id in election
+    elections[y.election].id = elections[y.election].id || y.election;
 
-  // Title
-  output('\nSetup supplement datasource for "' + y.election + '" at Airtable "' + elections[y.election].supplement.id + '":', '\n');
+    // Title
+    output(
+      '\nSetup supplement datasource for "' +
+        y.election +
+        '" at Airtable "' +
+        elections[y.election].supplement.id +
+        '":',
+      '\n'
+    );
 
-  // Confirm
-  try {
-    let answers = await inquirer.prompt([{
-      type: 'confirm',
-      name: 'confirm',
-      message: 'Setup will not overwrite any rows in the datasource, but \nwill create new data.  Are you sure?',
-      default: true
-    }]);
-    if (!answers.confirm) {
+    // Confirm
+    try {
+      let answers = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'confirm',
+          message:
+            'Setup will not overwrite any rows in the datasource, but \nwill create new data.  Are you sure?',
+          default: true
+        }
+      ]);
+      if (!answers.confirm) {
+        error('Exiting.');
+      }
+
+      output('');
+    }
+    catch (e) {
+      debug(e);
       error('Exiting.');
     }
 
-    output('');
-  }
-  catch (e) {
-    debug(e);
-    error('Exiting.');
-  }
+    // Create election object
+    let spinCreate = ora('Loading election').start();
+    let e;
+    try {
+      e = new Election(elections[y.election], {
+        exportPath: path.join(y.output, y.election)
+      });
+      spinCreate.succeed();
+    }
+    catch (e) {
+      spinCreate.fail();
+      debug(e);
+      error('Error trying to create election "' + y.election + '"');
+    }
 
-  // Create election object
-  let spinCreate = ora('Loading election').start();
-  let e;
-  try {
-    e = new Election(elections[y.election], {
-      exportPath: path.join(y.output, y.election)
-    });
-    spinCreate.succeed();
-  }
-  catch (e) {
-    spinCreate.fail();
-    debug(e);
-    error('Error trying to create election "' + y.election + '"');
-  }
+    // Fetch
+    let spinFetch = ora('Fetching results').start();
+    try {
+      await e.fetchResults();
+      spinFetch.succeed();
+    }
+    catch (e) {
+      spinFetch.fail();
+      debug(e);
+      error('Error trying fetch results for election "' + y.election + '"');
+    }
 
-  // Fetch
-  let spinFetch = ora('Fetching results').start();
-  try {
-    await e.fetchResults();
-    spinFetch.succeed();
+    // Fetch
+    let spinSetup = ora('Setting up datasource.').start();
+    try {
+      await e.setupSupplement();
+      spinSetup.succeed();
+      output('');
+    }
+    catch (e) {
+      spinSetup.fail();
+      debug(e);
+      error(
+        'Error trying to setup datasource for election "' + y.election + '"'
+      );
+    }
   }
-  catch (e) {
-    spinFetch.fail();
-    debug(e);
-    error('Error trying fetch results for election "' + y.election + '"');
-  }
-
-  // Fetch
-  let spinSetup = ora('Setting up datasource.').start();
-  try {
-    await e.setupSupplement();
-    spinSetup.succeed();
-    output('');
-  }
-  catch (e) {
-    spinSetup.fail();
-    debug(e);
-    error('Error trying to setup datasource for election "' + y.election + '"');
-  }
-});
-
-
+);
 
 // Verify
-command.command('verify', 'Verify results from SoS with independent counts.', (y) => {
-  return y.usage('\nVerify usage:\n  $0 verify -e <election> [args]')
-    .option('election', common.election)
-    .option('update', {
-      alias: 'u',
-      describe: 'Update the config JSON with found values.',
-      type: 'confirm',
-      default: false
-    });
-}, async (y) => {
-  let elections = getElections(y);
-  updateDebug(y);
-  checkElection(y);
+command.command(
+  'verify',
+  'Verify results from SoS with independent counts.',
+  y => {
+    return y
+      .usage('\nVerify usage:\n  $0 verify -e <election> [args]')
+      .option('election', common.election)
+      .option('update', {
+        alias: 'u',
+        describe: 'Update the config JSON with found values.',
+        type: 'confirm',
+        default: false
+      });
+  },
+  async y => {
+    let elections = getElections(y);
+    updateDebug(y);
+    checkElection(y);
 
-  // Check id in election
-  let e = elections[y.election];
-  e.id = e.id || y.election;
+    // Check id in election
+    let e = elections[y.election];
+    e.id = e.id || y.election;
 
-  // Title
-  output('\nVerify results for "' + y.election + '"', '\n');
+    // Title
+    output('\nVerify results for "' + y.election + '"', '\n');
 
-  // Confirm if update
-  if (y.update) {
-    let answers = await inquirer.prompt([{
-      type: 'confirm',
-      name: 'confirm',
-      message: 'Updating will overwrite your config JSON. Are you sure you want to do this?',
-      default: false
-    }]);
-    output('');
-
-    if (!answers.confirm) {
-      error('Exiting.');
-    }
-  }
-
-  // Verify
-  try {
-    let results = await verify(e.sos, e.results);
-    output(Table.print(results));
-
-    // Update
+    // Confirm if update
     if (y.update) {
-      e.results = results;
-      fs.writeFileSync(path.resolve(y.config), JSON.stringify(elections, null, '  '));
+      let answers = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'confirm',
+          message:
+            'Updating will overwrite your config JSON. Are you sure you want to do this?',
+          default: false
+        }
+      ]);
+      output('');
+
+      if (!answers.confirm) {
+        error('Exiting.');
+      }
+    }
+
+    // Verify
+    try {
+      let results = await verify(e.sos, e.results);
+      output(Table.print(results));
+
+      // Update
+      if (y.update) {
+        e.results = results;
+        fs.writeFileSync(
+          path.resolve(y.config),
+          JSON.stringify(elections, null, '  ')
+        );
+      }
+    }
+    catch (e) {
+      debug(e);
+      error(
+        'Issue with getting or saving verification results for election "' +
+          y.election +
+          '"'
+      );
     }
   }
-  catch (e) {
-    debug(e);
-    error('Issue with getting or saving verification results for election "' + y.election + '"');
-  }
-});
-
-
+);
 
 // Publish
-command.command('publish', 'Publish results to S3.', (y) => {
-  return y.usage('\Publish usage:\n  $0 publish -e <election> -s <s3-path> [args]')
-    .option('election', common.election)
-    .option('output', common.output)
-    .option('s3', {
-      alias: 's',
-      describe: 'S3 URI to publish to, such as "s3://bucket/path/to/export".',
-      type: 'string',
-      demandOption: true,
-    })
-    .option('version', {
-      alias: 'i',
-      describe: 'Whether to create export to a versioned path. This will append "_versions/TIMESTAMP" to the path.',
-      type: 'confirm',
-      default: false,
-    });
-}, async (y) => {
-  let elections = getElections(y);
-  updateDebug(y);
-  checkElection(y);
+command.command(
+  'publish',
+  'Publish results to S3.',
+  y => {
+    return y
+      .usage('Publish usage:\n  $0 publish -e <election> -s <s3-path> [args]')
+      .option('election', common.election)
+      .option('output', common.output)
+      .option('s3', {
+        alias: 's',
+        describe: 'S3 URI to publish to, such as "s3://bucket/path/to/export".',
+        type: 'string',
+        demandOption: true
+      })
+      .option('version', {
+        alias: 'i',
+        describe:
+          'Whether to create export to a versioned path. This will append "_versions/TIMESTAMP" to the path.',
+        type: 'confirm',
+        default: false
+      });
+  },
+  async y => {
+    let elections = getElections(y);
+    updateDebug(y);
+    checkElection(y);
 
-  // Check id in election
-  let e = elections[y.election];
-  e.id = e.id || y.election;
+    // Check id in election
+    let e = elections[y.election];
+    e.id = e.id || y.election;
 
-  // Title
-  output('\nPublish results for "' + y.election + '"', '\n');
+    // Title
+    output('\nPublish results for "' + y.election + '"', '\n');
 
-  // Create election object
-  let spinCreate = ora('Loading election').start();
-  try {
-    e = new Election(elections[y.election], {
-      exportPath: path.join(y.output, y.election)
-    });
-    spinCreate.succeed();
+    // Create election object
+    let spinCreate = ora('Loading election').start();
+    try {
+      e = new Election(elections[y.election], {
+        exportPath: path.join(y.output, y.election)
+      });
+      spinCreate.succeed();
+    }
+    catch (e) {
+      spinCreate.fail();
+      debug(e);
+      error('Error trying to create election "' + y.election + '"');
+    }
+
+    // Publish
+    let publishCreate = ora('Publishing election').start();
+    try {
+      let p = new Publish(e, {
+        exportPath: path.join(y.output, y.election),
+        s3Location: y.s3
+      });
+      await p.publish(y.version);
+      publishCreate.succeed();
+    }
+    catch (e) {
+      publishCreate.fail();
+      debug(e);
+      error('Issue with publishing results for election: "' + y.election + '"');
+    }
   }
-  catch (e) {
-    spinCreate.fail();
-    debug(e);
-    error('Error trying to create election "' + y.election + '"');
-  }
-
-  // Publish
-  let publishCreate = ora('Publishing election').start();
-  try {
-    let p = new Publish(e, {
-      exportPath: path.join(y.output, y.election),
-      s3Location: y.s3
-    });
-    await p.publish(y.version);
-    publishCreate.succeed();
-  }
-  catch (e) {
-    publishCreate.fail();
-    debug(e);
-    error('Issue with publishing results for election: "' + y.election + '"');
-  }
-});
-
-
-
+);
 
 // Print command
-command.command('print', 'Get results for an election and print out saxotech-style.', (y) => {
-  return y.usage('\nPrint usage:\n  $0 print -e <election> [args]')
-    .option('election', common.election)
-    .option('output', common.output);
-}, async (y) => {
-  let elections = getElections(y);
-  updateDebug(y);
-  checkElection(y);
+command.command(
+  'print',
+  'Get results for an election and print out saxotech-style.',
+  y => {
+    return y
+      .usage('\nPrint usage:\n  $0 print -e <election> [args]')
+      .option('election', common.election)
+      .option('output', common.output);
+  },
+  async y => {
+    let elections = getElections(y);
+    updateDebug(y);
+    checkElection(y);
 
-  // Check id in election
-  elections[y.election].id = elections[y.election].id || y.election;
+    // Check id in election
+    elections[y.election].id = elections[y.election].id || y.election;
 
-  output('\nCompiling election results for "' + y.election + '":', '\n');
-  let spinCreate = ora('Loading election').start();
+    output('\nCompiling election results for "' + y.election + '":', '\n');
+    let spinCreate = ora('Loading election').start();
 
-  // Create election object
-  let e;
-  try {
-    e = new Election(elections[y.election], {
-      exportPath: path.join(y.output, y.election)
-    });
-    spinCreate.succeed();
+    // Create election object
+    let e;
+    try {
+      e = new Election(elections[y.election], {
+        exportPath: path.join(y.output, y.election)
+      });
+      spinCreate.succeed();
+    }
+    catch (e) {
+      spinCreate.fail();
+      debug(e);
+      error('Error trying to create election "' + y.election + '"');
+    }
+
+    // Fetch
+    let spinFetch = ora('Fetching results').start();
+    try {
+      await e.fetchResults();
+      spinFetch.succeed();
+    }
+    catch (e) {
+      spinFetch.fail();
+      debug(e);
+      error('Error trying fetch results for election "' + y.election + '"');
+    }
+
+    // Verify
+    output('Printing... \n\n');
+    try {
+      e.exportPrint();
+    }
+    catch (e) {
+      debug(e);
+      error('Error printing results for election "' + y.election + '"');
+    }
   }
-  catch (e) {
-    spinCreate.fail();
-    debug(e);
-    error('Error trying to create election "' + y.election + '"');
-  }
-
-  // Fetch
-  let spinFetch = ora('Fetching results').start();
-  try {
-    await e.fetchResults();
-    spinFetch.succeed();
-  }
-  catch (e) {
-    spinFetch.fail();
-    debug(e);
-    error('Error trying fetch results for election "' + y.election + '"');
-  }
-
-  // Verify
-  output('Printing... \n\n');
-  try {
-    process.stdout.write(e.exportPrint());
-  }
-  catch (e) {
-    debug(e);
-    error('Error printing results for election "' + y.election + '"');
-  }
-});
-
-
-
+);
 
 // Setup help and parse
 command.help().argv;
-
-
 
 // Get elections
 function getElections(y) {
@@ -430,7 +474,11 @@ function checkElection(y) {
 
   // Check election
   if (!y.election || !elections[y.election]) {
-    error('Election "' + y.election + '" not found; use the `list` command to see available elections.');
+    error(
+      'Election "' +
+        y.election +
+        '" not found; use the `list` command to see available elections.'
+    );
   }
 
   // Check output
