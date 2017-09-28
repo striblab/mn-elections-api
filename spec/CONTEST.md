@@ -42,6 +42,9 @@ The following describes the fields for a Contest object.
   // Seat name, such as Council Member A
   seatName: 'A',
 
+  // Sort name.  Not required.
+  sort: 'Custom sort',
+
   // Other district codes that may be attached for reference, and determined
   // from district and type
   state: 'MN',
