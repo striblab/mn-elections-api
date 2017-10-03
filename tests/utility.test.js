@@ -5,6 +5,9 @@
 // Implicit depedences
 /* global describe, test, expect */
 
+// Testing depedences
+const _ = require('lodash');
+
 // To test
 const utility = require('../lib/utility.js');
 
@@ -69,7 +72,9 @@ describe('lib/utility | makeID', () => {
     expect(utility.makeID(['  0 ', 'a', 'b'])).toBe('0-a-b');
     expect(utility.makeID(['  0 ', '  a  ', '   b'])).toBe('0-a-b');
     expect(utility.makeID(['a', null, 'c', null, null, 0])).toBe('a-|-c-|-|-0');
-    expect(utility.makeID(['camelCase', 'a', 'CAMELCASE'])).toBe('camel-case-a-camelcase');
+    expect(utility.makeID(['camelCase', 'a', 'CAMELCASE'])).toBe(
+      'camel-case-a-camelcase'
+    );
   });
 });
 
@@ -91,5 +96,29 @@ describe('lib/utility | titleCase', () => {
     expect(utility.titleCase('thing iii')).toBe('Thing III');
     expect(utility.titleCase('thing iv')).toBe('Thing IV');
     expect(utility.titleCase('dISTRICT 36a')).toBe('District 36A');
+  });
+});
+
+// deepMapValues function
+describe('lib/utility | deepMapValues', () => {
+  test('non-object and non-arrays should return empty object', () => {
+    expect(utility.deepMapValues(null)).toEqual({});
+    expect(utility.deepMapValues(undefined)).toEqual({});
+    expect(utility.deepMapValues(true)).toEqual({});
+    expect(utility.deepMapValues(1)).toEqual({});
+  });
+
+  test('should return itself without mapper', () => {
+    expect(
+      utility.deepMapValues({ a: 1, b: 2, c: { d: 'a', e: [1] } })
+    ).toEqual({ a: 1, b: 2, c: { d: 'a', e: [1] } });
+  });
+
+  test('should transform with mapper', () => {
+    expect(
+      utility.deepMapValues({ a: 1, b: 2, c: { d: 'a', e: [1] } }, i => {
+        return _.isArray(i) ? i : i + 1;
+      })
+    ).toEqual({ a: 2, b: 3, c: { d: 'a1', e: [1] } });
   });
 });

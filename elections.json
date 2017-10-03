@@ -685,7 +685,8 @@
     }
   },
   "20170214": {
-    "notes": "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
+    "notes":
+      "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
     "special": true,
     "sos": {
       "host": "ftp.sos.state.mn.us",
@@ -819,65 +820,54 @@
       "id": "apppQbnHjRq6W3xPc"
     },
     "sets": {
-      "dashboard": [
-        "20171107-local-43000-2001"
-      ]
-    },
-    "print": [
-      {
-        "title": "Minneapolis races",
+      "dashboard": ["20171107-local-43000-2001"],
+      "metro-local": {
+        "title": "Metro local races",
         "where": {
-          "area": "^Minneapolis$"
-        },
-        "headings": [
-          "name",
-          "subArea"
-        ]
+          "metro": true,
+          "twinCities": { "$not": true },
+          "type": "local"
+        }
       },
-      {
-        "title": "St. Paul races",
+      "metro-school-board": {
+        "title": "Metro school board",
         "where": {
-          "area": "^St\\. Paul$"
-        },
-        "headings": [
-          "name",
-          "subArea"
-        ]
+          "metro": true,
+          "twinCities": { "$not": true },
+          "name": { "$regex": "school board", "$options": "i" }
+        }
       },
-      {
-        "title": "Suburban races",
+      "metro-school-questions": {
+        "title": "Metro school questions",
         "where": {
-          "group": "^Suburban$"
-        },
-        "headings": [
-          "area",
-          "name",
-          "subArea"
-        ]
-      },
-      {
-        "title": "School board races",
-        "where": {
-          "name": "school board"
-        },
-        "headings": [
-          "area",
-          null,
-          "subArea"
-        ]
-      },
-      {
-        "title": "School referendums",
-        "where": {
+          "metro": true,
+          "twinCities": { "$not": true },
           "question": true,
-          "name": "school"
-        },
-        "headings": [
-          "area",
-          null,
-          "seatName"
-        ]
+          "name": { "$regex": "school", "$options": "i" }
+        }
+      },
+      "outstate-local": {
+        "title": "Out-state local races",
+        "where": {
+          "metro": { "$not": true },
+          "type": "local"
+        }
+      },
+      "outstate-school-board": {
+        "title": "Out-state school board",
+        "where": {
+          "metro": { "$not": true },
+          "name": { "$regex": "school board", "$options": "i" }
+        }
+      },
+      "outstate-school-questions": {
+        "title": "Out-state school questions",
+        "where": {
+          "metro": { "$not": true },
+          "question": true,
+          "name": { "$regex": "school", "$options": "i" }
+        }
       }
-    ]
+    }
   }
 }
