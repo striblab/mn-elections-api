@@ -48,6 +48,9 @@ The following describes the fields for a Contest object.
   // Whether or not this contest is in 11 county metro or not.
   metro: false,
 
+  // Whether or not contest is in the Twin Cities (entirely)
+  twinCities: false,
+
   // Array of arbitrary groups.  These should be the display version of the
   // group name
   groups: ['Group 1'],
