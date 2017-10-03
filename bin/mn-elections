@@ -201,7 +201,7 @@ command.command(
           type: 'confirm',
           name: 'confirm',
           message:
-            'Setup will not overwrite any rows in the datasource, but \nwill create new data.  Are you sure?',
+            'Setup will overwrite any rows in the datasource that are not marked\nas "Published", and will create new rows for contests that do not exist.\nAre you sure?',
           default: true
         }
       ]);
