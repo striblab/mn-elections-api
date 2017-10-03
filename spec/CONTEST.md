@@ -45,6 +45,13 @@ The following describes the fields for a Contest object.
   // Sort name.  Not required.
   sort: 'Custom sort',
 
+  // Whether or not this contest is in 11 county metro or not.
+  metro: false,
+
+  // Array of arbitrary groups.  These should be the display version of the
+  // group name
+  groups: ['Group 1'],
+
   // Other district codes that may be attached for reference, and determined
   // from district and type
   state: 'MN',
