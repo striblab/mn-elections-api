@@ -685,8 +685,7 @@
     }
   },
   "20170214": {
-    "notes":
-      "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
+    "notes": "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
     "special": true,
     "sos": {
       "host": "ftp.sos.state.mn.us",
@@ -777,11 +776,16 @@
     "results": [
       {
         "file": "local.txt",
-        "type": "local"
+        "type": "local",
+        "hasRankedChoice": true,
+        "contests": 76,
+        "candidates": 303
       },
       {
         "file": "SDRaceQuestions.txt",
-        "type": "school"
+        "type": "school",
+        "contests": 186,
+        "candidates": 567
       }
     ],
     "meta": {
@@ -802,6 +806,12 @@
           "file": "SchoolDistTbl.txt",
           "type": "school"
         }
+      ],
+      "questions": [
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
       ]
     },
     "supplement": {
@@ -809,33 +819,64 @@
       "id": "apppQbnHjRq6W3xPc"
     },
     "sets": {
-      "dashboard": ["20171107-local-43000-2001"]
+      "dashboard": [
+        "20171107-local-43000-2001"
+      ]
     },
     "print": [
       {
         "title": "Minneapolis races",
-        "where": { "area": "^Minneapolis$" },
-        "headings": ["name", "subArea"]
+        "where": {
+          "area": "^Minneapolis$"
+        },
+        "headings": [
+          "name",
+          "subArea"
+        ]
       },
       {
         "title": "St. Paul races",
-        "where": { "area": "^St\\. Paul$" },
-        "headings": ["name", "subArea"]
+        "where": {
+          "area": "^St\\. Paul$"
+        },
+        "headings": [
+          "name",
+          "subArea"
+        ]
       },
       {
         "title": "Suburban races",
-        "where": { "group": "^Suburban$" },
-        "headings": ["area", "name", "subArea"]
+        "where": {
+          "group": "^Suburban$"
+        },
+        "headings": [
+          "area",
+          "name",
+          "subArea"
+        ]
       },
       {
         "title": "School board races",
-        "where": { "name": "school board" },
-        "headings": ["area", null, "subArea"]
+        "where": {
+          "name": "school board"
+        },
+        "headings": [
+          "area",
+          null,
+          "subArea"
+        ]
       },
       {
         "title": "School referendums",
-        "where": { "question": true, "name": "school" },
-        "headings": ["area", null, "seatName"]
+        "where": {
+          "question": true,
+          "name": "school"
+        },
+        "headings": [
+          "area",
+          null,
+          "seatName"
+        ]
       }
     ]
   }
