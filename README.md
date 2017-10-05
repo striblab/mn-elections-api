@@ -97,6 +97,17 @@ Use the `--update` option to update the elections JSON.
 * `SOS_FTP_PASS`: The FTP password to access to Secretary of State FTP site.
 * `AIRTABLE_API_KEY`: The API key for Airtable, which is where supplemental data is stored.
 
+## Supplement
+
+Note that Airtable does not have an API to create tables/fields, so one has to manually created for a supplement source.
+
+Overall, the fields correspond to the data specifications in `spec/`, but there is some key logic to be aware of:
+
+* No data from supplement will be imported if the `Publish` field is not checked.
+* Percents will be calculated if `Votes` are provided.
+* Mark a contest as `Final` if a winner is to be calculated.  This field is primarily used for ranked-choiced contests that don't have final count data.
+* Mark a contest as `Called` if the contest is called by staff, and ONLY if a `Winner` has been marked.  If no winner is provided, this will purposefully break the import process.  Overall, a contest should not be marked as `Final` and `Called`.
+
 ## Glossary
 
 * `contest`: A race or ballot question.
