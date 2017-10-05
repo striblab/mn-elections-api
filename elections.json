@@ -868,6 +868,82 @@
           "name": { "$regex": "school", "$options": "i" }
         }
       }
-    }
+    },
+    "print": [
+      {
+        "title": "Minneapolis mayor",
+        "headings": [],
+        "where": {
+          "area": { "$regex": "minneapolis", "$options": "i" },
+          "name": { "$regex": "mayor", "$options": "i" },
+          "twinCities": true
+        }
+      },
+      {
+        "title": "Minneapolis races",
+        "headings": ["name", "subarea"],
+        "where": {
+          "area": { "$regex": "minneapolis", "$options": "i" },
+          "name": { "$not": { "$regex": "mayor", "$options": "i" } },
+          "twinCities": true
+        }
+      },
+      {
+        "title": "St. Paul mayor",
+        "headings": [],
+        "where": {
+          "area": { "$regex": "st.*paul", "$options": "i" },
+          "name": { "$regex": "mayor", "$options": "i" },
+          "twinCities": true
+        }
+      },
+      {
+        "title": "Metro local races",
+        "where": {
+          "metro": true,
+          "twinCities": { "$not": true },
+          "type": "local"
+        }
+      },
+      {
+        "title": "Metro school board",
+        "where": {
+          "metro": true,
+          "twinCities": { "$not": true },
+          "name": { "$regex": "school board", "$options": "i" }
+        }
+      },
+      {
+        "title": "Metro school questions",
+        "where": {
+          "metro": true,
+          "twinCities": { "$not": true },
+          "question": true,
+          "name": { "$regex": "school", "$options": "i" }
+        }
+      },
+      {
+        "title": "Out-state local races",
+        "where": {
+          "metro": { "$not": true },
+          "type": "local"
+        }
+      },
+      {
+        "title": "Out-state school board",
+        "where": {
+          "metro": { "$not": true },
+          "name": { "$regex": "school board", "$options": "i" }
+        }
+      },
+      {
+        "title": "Out-state school questions",
+        "where": {
+          "metro": { "$not": true },
+          "question": true,
+          "name": { "$regex": "school", "$options": "i" }
+        }
+      }
+    ]
   }
 }

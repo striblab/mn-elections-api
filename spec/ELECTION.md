@@ -114,6 +114,15 @@ The following describes the fields for an Election object.
     }
   },
 
+  // Similar to sets, but is an array and only uses the custom format
+  print: [{
+    title: 'To print',
+    where: {
+      type: "school",
+      area: { $in: [ "Custom 1", "Custom 2" ]}
+    }
+  }],
+
   // Any extra notes about the election
   notes: "Some notes here"
 }
