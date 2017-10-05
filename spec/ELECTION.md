@@ -96,11 +96,22 @@ The following describes the fields for an Election object.
 
   // Object to define sets of contests for specific endpoints.  The endpoint
   // will be results/set-"key".json
+  //
+  // The set can be an array of contest IDs, or an object describing how to
+  // filter contests, with MongoDB syntax via the sift library
+  // https://www.npmjs.com/package/sift
   sets: {
     dashboard: [
       '20170808-xxxxxxx',
       '20170808-yyyyyyy'
-    ]
+    ],
+    custom: {
+      title: "Custom set",
+      where: {
+        type: "school",
+        area: { $in: [ "Custom 1", "Custom 2" ]}
+      }
+    }
   },
 
   // Any extra notes about the election
