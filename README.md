@@ -70,6 +70,8 @@ This will put the results to the bucket `bucket-name` at path `path/to/elections
 
 The `--output` option can be used to specific where the local results are stored (see `results` command).  The `--version` flag will put the results in a timestamp path, for example: `path/to/elections/20131105/_versions/UNIX_TIMESTAMP`.
 
+**NOTE:** The publish command will delete things on S3.  This is good because we dont' want old or inaccurate data to be avilable through the "API".  But, this means that if you do `--version` then a non-version publish, the version data will be deleted.  This means, you should put the versioned data in a different place.
+
 #### `setup` command
 
 `setup` will setup the supplemental source, i.e. the Airtable, with the contests from the election.  Unfortunately it is necessary to setup the tables and columns in the Airtable Base manually.
