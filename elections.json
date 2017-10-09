@@ -881,7 +881,7 @@
       },
       {
         "title": "Minneapolis races",
-        "headings": ["name", "subarea"],
+        "headings": ["name", "subArea"],
         "where": {
           "area": { "$regex": "minneapolis", "$options": "i" },
           "name": { "$not": { "$regex": "mayor", "$options": "i" } },
