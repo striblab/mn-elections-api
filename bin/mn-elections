@@ -21,6 +21,12 @@ const verify = require('../lib/verify.js');
 const Publish = require('../lib/publish.js');
 const debug = require('debug')('mn-elections-api:cmd');
 
+// Handle
+process.on('unhandledRejection', r => {
+  debug(r);
+  error('Unhandled error, use DEBUG=* to get more info.');
+});
+
 // Add some more symbols
 lSymbols.dot = 'º';
 
@@ -287,28 +293,32 @@ command.command(
     // Title
     output('\nVerify results for "' + y.election + '"', '\n');
 
-    // Confirm if update
-    if (y.update) {
-      let answers = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'confirm',
-          message:
-            'Updating will overwrite your config JSON. Are you sure you want to do this?',
-          default: false
-        }
-      ]);
-      output('');
-
-      if (!answers.confirm) {
-        error('Exiting.');
-      }
-    }
-
     // Verify
     try {
+      output('Current results\n');
+      output(Table.print(e.results));
+
       let results = await verify(e.sos, e.results);
+      output('Independent results\n');
       output(Table.print(results));
+
+      // Confirm if update
+      if (y.update) {
+        let answers = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'confirm',
+            message:
+              'Updating will overwrite your config JSON. Are you sure you want to do this?',
+            default: false
+          }
+        ]);
+        output('');
+
+        if (!answers.confirm) {
+          error('Exiting.');
+        }
+      }
 
       // Update
       if (y.update) {
