@@ -17,6 +17,7 @@ const inquirer = require('inquirer');
 const Table = require('easy-table');
 
 const Election = require('../lib/election.js');
+const testData = require('../lib/test-data.js');
 const verify = require('../lib/verify.js');
 const Publish = require('../lib/publish.js');
 const debug = require('debug')('mn-elections-api:cmd');
@@ -64,6 +65,12 @@ let common = {
     describe: 'Path to output election to.',
     type: 'string',
     default: './mn-elections-output'
+  },
+  'use-cache': {
+    alias: 'z',
+    describe: 'Path to output election to.',
+    type: 'boolean',
+    default: false
   }
 };
 
@@ -108,7 +115,8 @@ command.command(
     return y
       .usage('\nResults usage:\n  $0 results -e <election> [args]')
       .option('election', common.election)
-      .option('output', common.output);
+      .option('output', common.output)
+      .option('use-cache', common['use-cache']);
   },
   async y => {
     let elections = getElections(y);
@@ -125,7 +133,8 @@ command.command(
     let e;
     try {
       e = new Election(elections[y.election], {
-        exportPath: path.join(y.output, y.election)
+        exportPath: path.join(y.output, y.election),
+        cache: y['use-cache']
       });
       spinCreate.succeed();
     }
@@ -139,6 +148,9 @@ command.command(
     let spinFetch = ora('Fetching results').start();
     try {
       await e.fetchResults();
+      if (process.env.TEST_TIMELINE) {
+        testData(e.contests, { timeline: process.env.TEST_TIMELINE });
+      }
       spinFetch.succeed();
     }
     catch (e) {
@@ -415,7 +427,8 @@ command.command(
     return y
       .usage('\nPrint usage:\n  $0 print -e <election> [args]')
       .option('election', common.election)
-      .option('output', common.output);
+      .option('output', common.output)
+      .option('use-cache', common['use-cache']);
   },
   async y => {
     let elections = getElections(y);
@@ -432,7 +445,8 @@ command.command(
     let e;
     try {
       e = new Election(elections[y.election], {
-        exportPath: path.join(y.output, y.election)
+        exportPath: path.join(y.output, y.election),
+        cache: y['use-cache']
       });
       spinCreate.succeed();
     }
