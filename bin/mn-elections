@@ -68,9 +68,15 @@ let common = {
   },
   'use-cache': {
     alias: 'z',
-    describe: 'Path to output election to.',
+    describe: 'Use cache for meta and supplement data if it is available.',
     type: 'boolean',
     default: false
+  },
+  test: {
+    alias: 't',
+    describe:
+      'Whether to add test data, this should be "early", "middle" or "end"',
+    type: 'string'
   }
 };
 
@@ -116,7 +122,8 @@ command.command(
       .usage('\nResults usage:\n  $0 results -e <election> [args]')
       .option('election', common.election)
       .option('output', common.output)
-      .option('use-cache', common['use-cache']);
+      .option('use-cache', common['use-cache'])
+      .option('test', common.test);
   },
   async y => {
     let elections = getElections(y);
@@ -148,9 +155,12 @@ command.command(
     let spinFetch = ora('Fetching results').start();
     try {
       await e.fetchResults();
-      if (process.env.TEST_TIMELINE) {
+
+      if (process.env.TEST_TIMELINE || y.test) {
         testData(e.contests, { timeline: process.env.TEST_TIMELINE });
+        e.exportResults();
       }
+
       spinFetch.succeed();
     }
     catch (e) {
@@ -460,6 +470,12 @@ command.command(
     let spinFetch = ora('Fetching results').start();
     try {
       await e.fetchResults();
+
+      if (process.env.TEST_TIMELINE || y.test) {
+        testData(e.contests, { timeline: process.env.TEST_TIMELINE });
+        e.exportResults();
+      }
+
       spinFetch.succeed();
     }
     catch (e) {
