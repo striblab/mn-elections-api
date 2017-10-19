@@ -157,7 +157,7 @@ command.command(
       await e.fetchResults();
 
       if (process.env.TEST_TIMELINE || y.test) {
-        testData(e.contests, { timeline: process.env.TEST_TIMELINE });
+        testData(e.contests, { timeline: process.env.TEST_TIMELINE || y.test });
         e.exportResults();
       }
 
@@ -472,7 +472,7 @@ command.command(
       await e.fetchResults();
 
       if (process.env.TEST_TIMELINE || y.test) {
-        testData(e.contests, { timeline: process.env.TEST_TIMELINE });
+        testData(e.contests, { timeline: process.env.TEST_TIMELINE || y.test });
         e.exportResults();
       }
 
