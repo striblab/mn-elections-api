@@ -685,7 +685,8 @@
     }
   },
   "20170214": {
-    "notes": "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
+    "notes":
+      "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
     "special": true,
     "sos": {
       "host": "ftp.sos.state.mn.us",
@@ -819,9 +820,7 @@
       "id": "apppQbnHjRq6W3xPc"
     },
     "sets": {
-      "dashboard": [
-        "20171107-local-43000-2001"
-      ],
+      "dashboard": ["20171107-local-43000-2001", "20171107-local-58000-2001"],
       "metro-local": {
         "title": "Metro local races",
         "where": {
@@ -912,10 +911,7 @@
       },
       {
         "title": "Minneapolis races",
-        "headings": [
-          "name",
-          "subArea"
-        ],
+        "headings": ["name", "subArea"],
         "where": {
           "area": {
             "$regex": "minneapolis",
