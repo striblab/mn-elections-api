@@ -911,7 +911,7 @@
       },
       {
         "title": "Minneapolis races",
-        "headings": ["name", "subArea"],
+        "headings": [["name", "seatName", "subArea"]],
         "where": {
           "area": {
             "$regex": "minneapolis",

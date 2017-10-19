@@ -438,7 +438,8 @@ command.command(
       .usage('\nPrint usage:\n  $0 print -e <election> [args]')
       .option('election', common.election)
       .option('output', common.output)
-      .option('use-cache', common['use-cache']);
+      .option('use-cache', common['use-cache'])
+      .option('test', common.test);
   },
   async y => {
     let elections = getElections(y);
