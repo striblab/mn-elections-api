@@ -962,7 +962,15 @@
             "$regex": "school board",
             "$options": "i"
           }
-        }
+        },
+        "headings": ["area", ["name", "seatName", "subArea"]],
+        "rename": [
+          [["\\((i|s)sd\\s#[0-9]+\\)", ""]],
+          [
+            ["(for\\s)?school board member", ""],
+            ["^at large(.*)", "At Large$1"]
+          ]
+        ]
       },
       {
         "title": "Metro school questions",
@@ -997,7 +1005,15 @@
             "$regex": "school board",
             "$options": "i"
           }
-        }
+        },
+        "headings": ["area", ["name", "seatName", "subArea"]],
+        "rename": [
+          [["\\((i|s)sd\\s#[0-9]+\\)", ""]],
+          [
+            ["(for\\s)?school board member", ""],
+            ["^at large(.*)", "At Large$1"]
+          ]
+        ]
       },
       {
         "title": "Out-state school questions",
