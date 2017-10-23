@@ -785,8 +785,8 @@
       {
         "file": "SDRaceQuestions.txt",
         "type": "school",
-        "contests": 187,
-        "candidates": 572
+        "contests": 188,
+        "candidates": 575
       }
     ],
     "meta": {
@@ -974,6 +974,7 @@
       },
       {
         "title": "Metro school questions",
+        "inlineQuestionTitle": true,
         "where": {
           "metro": true,
           "twinCities": {
@@ -984,7 +985,9 @@
             "$regex": "school",
             "$options": "i"
           }
-        }
+        },
+        "headings": ["area"],
+        "rename": [[["\\((i|s)sd\\s#[0-9]+\\)", ""]]]
       },
       {
         "title": "Out-state local races",
@@ -1017,6 +1020,7 @@
       },
       {
         "title": "Out-state school questions",
+        "inlineQuestionTitle": true,
         "where": {
           "metro": {
             "$not": true
@@ -1026,7 +1030,9 @@
             "$regex": "school",
             "$options": "i"
           }
-        }
+        },
+        "headings": ["area"],
+        "rename": [[["\\((i|s)sd\\s#[0-9]+\\)", ""]]]
       }
     ]
   }
