@@ -820,7 +820,35 @@
       "id": "apppQbnHjRq6W3xPc"
     },
     "sets": {
-      "dashboard": ["20171107-local-43000-2001", "20171107-local-58000-2001"],
+      "dashboard": [
+        "20171107-local-43000-2001",
+
+        "20171107-local-43000-2101",
+        "20171107-local-43000-2111",
+        "20171107-local-43000-2121",
+        "20171107-local-43000-2131",
+        "20171107-local-43000-2141",
+        "20171107-local-43000-2151",
+        "20171107-local-43000-2161",
+        "20171107-local-43000-2171",
+        "20171107-local-43000-2181",
+        "20171107-local-43000-2191",
+        "20171107-local-43000-2201",
+        "20171107-local-43000-2211",
+        "20171107-local-43000-2221",
+
+        "20171107-local-43000-2401",
+
+        "20171107-local-43000-2501",
+        "20171107-local-43000-2511",
+        "20171107-local-43000-2521",
+        "20171107-local-43000-2531",
+        "20171107-local-43000-2541",
+        "20171107-local-43000-2551",
+        "20171107-local-43000-2561",
+
+        "20171107-local-58000-2001"
+      ],
       "metro-local": {
         "title": "Metro local races",
         "where": {
@@ -832,7 +860,7 @@
         }
       },
       "metro-school-board": {
-        "title": "Metro school board",
+        "title": "Metro school board races",
         "where": {
           "metro": true,
           "twinCities": {
@@ -859,7 +887,7 @@
         }
       },
       "outstate-local": {
-        "title": "Out-state local races",
+        "title": "Other MN local races",
         "where": {
           "metro": {
             "$not": true
@@ -868,7 +896,7 @@
         }
       },
       "outstate-school-board": {
-        "title": "Out-state school board",
+        "title": "Other MN school board races",
         "where": {
           "metro": {
             "$not": true
@@ -880,7 +908,7 @@
         }
       },
       "outstate-school-questions": {
-        "title": "Out-state school questions",
+        "title": "Other MN school questions",
         "where": {
           "metro": {
             "$not": true
