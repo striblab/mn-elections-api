@@ -778,15 +778,11 @@
       {
         "file": "local.txt",
         "type": "local",
-        "hasRankedChoice": true,
-        "contests": 76,
-        "candidates": 303
+        "hasRankedChoice": true
       },
       {
         "file": "SDRaceQuestions.txt",
-        "type": "school",
-        "contests": 188,
-        "candidates": 575
+        "type": "school"
       }
     ],
     "meta": {
