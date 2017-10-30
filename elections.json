@@ -936,8 +936,15 @@
       },
       {
         "title": "Minneapolis races",
-        "headings": [["name", "seatName", "subArea"]],
         "filename": "ELEX_MPLS",
+        "headings": [["name", "seatName", "subArea"]],
+        "rename": [
+          [
+            ["Council Member", ""],
+            ["Park and Recreation Commissioner", ""],
+            ["^at large(.*)", "At Large$1"]
+          ]
+        ],
         "where": {
           "area": {
             "$regex": "minneapolis",
