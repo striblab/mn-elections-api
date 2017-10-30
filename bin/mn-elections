@@ -20,6 +20,7 @@ const Election = require('../lib/election.js');
 const testData = require('../lib/test-data.js');
 const verify = require('../lib/verify.js');
 const Publish = require('../lib/publish.js');
+const putSaxo = require('../lib/put-saxo.js');
 const debug = require('debug')('mn-elections-api:cmd');
 
 // Handle
@@ -439,7 +440,13 @@ command.command(
       .option('election', common.election)
       .option('output', common.output)
       .option('use-cache', common['use-cache'])
-      .option('test', common.test);
+      .option('test', common.test)
+      .option('upload', {
+        alias: 'p',
+        describe: 'Upload print files to Saxotech.',
+        type: 'boolean',
+        default: false
+      });
   },
   async y => {
     let elections = getElections(y);
@@ -485,14 +492,37 @@ command.command(
       error('Error trying fetch results for election "' + y.election + '"');
     }
 
-    // Verify
+    // Printing
     output('Printing... \n\n');
+    let outputs;
     try {
-      e.exportPrint();
+      outputs = e.exportPrint();
     }
     catch (e) {
       debug(e);
       error('Error printing results for election "' + y.election + '"');
+    }
+
+    // Upload
+    if (y.upload) {
+      let spinUpload = ora('Uploading files').start();
+      try {
+        await putSaxo(
+          {},
+          _.map(outputs, o => {
+            return path.join(...[e.exportPath, ...o]);
+          })
+        );
+
+        spinUpload.succeed();
+      }
+      catch (e) {
+        spinUpload.fail();
+        debug(e);
+        error(
+          'Error trying upload print files for election: "' + y.election + '"'
+        );
+      }
     }
   }
 );
