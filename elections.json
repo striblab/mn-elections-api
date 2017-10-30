@@ -921,6 +921,7 @@
       {
         "title": "Minneapolis mayor",
         "headings": [],
+        "filename": "ELEX_MPLSMAY",
         "where": {
           "area": {
             "$regex": "minneapolis",
@@ -936,6 +937,7 @@
       {
         "title": "Minneapolis races",
         "headings": [["name", "seatName", "subArea"]],
+        "filename": "ELEX_MPLS",
         "where": {
           "area": {
             "$regex": "minneapolis",
@@ -953,6 +955,7 @@
       {
         "title": "St. Paul mayor",
         "headings": [],
+        "filename": "ELEX_STPMAY",
         "where": {
           "area": {
             "$regex": "st.*paul",
@@ -967,6 +970,7 @@
       },
       {
         "title": "Metro local races",
+        "filename": "ELEX_METCITY",
         "where": {
           "metro": true,
           "twinCities": {
@@ -977,6 +981,7 @@
       },
       {
         "title": "Metro school board",
+        "filename": "ELEX_METSKUL",
         "where": {
           "metro": true,
           "twinCities": {
@@ -999,6 +1004,7 @@
       {
         "title": "Metro school questions",
         "inlineQuestionTitle": true,
+        "filename": "ELEX_METQUE",
         "where": {
           "metro": true,
           "twinCities": {
@@ -1015,6 +1021,7 @@
       },
       {
         "title": "Out-state local races",
+        "filename": "ELEX_MNCITY",
         "where": {
           "metro": {
             "$not": true
@@ -1024,6 +1031,7 @@
       },
       {
         "title": "Out-state school board",
+        "filename": "ELEX_MNSKUL",
         "where": {
           "metro": {
             "$not": true
@@ -1044,6 +1052,7 @@
       },
       {
         "title": "Out-state school questions",
+        "filename": "ELEX_MNQUE",
         "inlineQuestionTitle": true,
         "where": {
           "metro": {
