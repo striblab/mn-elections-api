@@ -378,6 +378,11 @@ command.command(
         type: 'string',
         demandOption: true
       })
+      .option('region', {
+        alias: 'w',
+        describe: 'Region of bucket, defaults to "us-east-1".',
+        type: 'string'
+      })
       .option('version', {
         alias: 'i',
         describe:
@@ -417,7 +422,8 @@ command.command(
     try {
       let p = new Publish(e, {
         exportPath: path.join(y.output, y.election),
-        s3Location: y.s3
+        s3Location: y.s3,
+        s3Region: y.region ? y.region : undefined
       });
       await p.publish(y.version);
       publishCreate.succeed();
