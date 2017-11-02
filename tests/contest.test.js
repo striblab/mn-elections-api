@@ -5,13 +5,16 @@
 // Implicit depedences
 /* global describe, test, expect */
 
+// Utility
+const _ = require('lodash');
+
 // To test
 const Contest = require('../lib/contest.js');
 
 // Mocks
 const mockE = (o = {}) => {
   return {
-    get: (t) => o[t]
+    get: t => o[t]
   };
 };
 
@@ -21,27 +24,47 @@ describe('lib/contest | constructor', () => {
     return new Contest(...args);
   };
   let shouldThrow = (...args) => {
-    return () => { return contest(...args); };
+    return () => {
+      return contest(...args);
+    };
   };
 
   test('throw error for bad input', () => {
-    expect(shouldThrow(1, undefined, { noValidate: true }, mockE())).toThrow(/provided/);
-    expect(shouldThrow(1.0, undefined, { noValidate: true }, mockE())).toThrow(/provided/);
-    expect(shouldThrow(true, undefined, { noValidate: true }, mockE())).toThrow(/provided/);
-    expect(shouldThrow([], undefined, { noValidate: true }, mockE())).toThrow(/provided/);
+    expect(shouldThrow(1, undefined, { noValidate: true }, mockE())).toThrow(
+      /provided/
+    );
+    expect(shouldThrow(1.0, undefined, { noValidate: true }, mockE())).toThrow(
+      /provided/
+    );
+    expect(shouldThrow(true, undefined, { noValidate: true }, mockE())).toThrow(
+      /provided/
+    );
+    expect(shouldThrow([], undefined, { noValidate: true }, mockE())).toThrow(
+      /provided/
+    );
   });
 
   test('defaults set', () => {
-    expect(contest(undefined, undefined, { noValidate: true }, mockE()).get('uncontested')).toBe(false);
-    expect(contest(undefined, undefined, { noValidate: true }, mockE()).get('seats')).toBe(1);
+    expect(
+      contest(undefined, undefined, { noValidate: true }, mockE()).get(
+        'uncontested'
+      )
+    ).toBe(false);
+    expect(
+      contest(undefined, undefined, { noValidate: true }, mockE()).get('seats')
+    ).toBe(1);
   });
 
   test('properties set', () => {
-    expect(contest(undefined, { a: 'b' }, { noValidate: true }, mockE()).get('a')).toBe('b');
+    expect(
+      contest(undefined, { a: 'b' }, { noValidate: true }, mockE()).get('a')
+    ).toBe('b');
   });
 
   test('input set via object', () => {
-    expect(contest({ a: 'b' }, undefined, { noValidate: true }, mockE()).get('a')).toBe('b');
+    expect(
+      contest({ a: 'b' }, undefined, { noValidate: true }, mockE()).get('a')
+    ).toBe('b');
   });
 });
 
@@ -53,7 +76,9 @@ describe('lib/contest | setAll', () => {
     return c;
   };
   let shouldThrow = (...args) => {
-    return () => { return contest(...args); };
+    return () => {
+      return contest(...args);
+    };
   };
 
   test('throw error for bad input', () => {
@@ -64,8 +89,14 @@ describe('lib/contest | setAll', () => {
   });
 
   test('should set candidates', () => {
-    expect(contest({ a: 'b', candidates: [{ id: 't', c: 'd' }] }).get('a')).toBe('b');
-    expect(contest({ a: 'b', candidates: [{ id: 't', c: 'd' }] }).candidateGet('t').get('c')).toBe('d');
+    expect(
+      contest({ a: 'b', candidates: [{ id: 't', c: 'd' }] }).get('a')
+    ).toBe('b');
+    expect(
+      contest({ a: 'b', candidates: [{ id: 't', c: 'd' }] })
+        .candidateGet('t')
+        .get('c')
+    ).toBe('d');
   });
 });
 
@@ -78,8 +109,9 @@ describe('lib/contest | toJSON', () => {
   };
 
   test('should export object', () => {
-    expect(contest({ a: 'b', candidates: [{ id: 't', c: 'd' }] }).candidates)
-      .toHaveLength(1);
+    expect(
+      contest({ a: 'b', candidates: [{ id: 't', c: 'd' }] }).candidates
+    ).toHaveLength(1);
   });
 });
 
@@ -90,7 +122,12 @@ describe('lib/contest | candidateSet', () => {
     let candidate1a = { id: 'a', b: 'c' };
     let candidate2 = { id: 'b' };
 
-    let c = new Contest({ a: 'b', candidates: [ candidate1 ]}, undefined, { noValidate: true }, mockE());
+    let c = new Contest(
+      { a: 'b', candidates: [candidate1] },
+      undefined,
+      { noValidate: true },
+      mockE()
+    );
     expect(c.candidates).toHaveLength(1);
 
     c.candidateSet(candidate1a);
@@ -102,11 +139,20 @@ describe('lib/contest | candidateSet', () => {
   });
 
   test('add ranked choice candidates', () => {
-    let candidate1 = { id: 'a', ranks: [{ votes: 10, rankedChoice: 1 }]};
-    let candidate1a = { id: 'a', b: 'c', ranks: [{ votes: 10, rankedChoice: 2 }]};
+    let candidate1 = { id: 'a', ranks: [{ votes: 10, rankedChoice: 1 }] };
+    let candidate1a = {
+      id: 'a',
+      b: 'c',
+      ranks: [{ votes: 10, rankedChoice: 2 }]
+    };
     let candidate2 = { id: 'b' };
 
-    let c = new Contest({ a: 'b', candidates: [ candidate1 ]}, undefined, { noValidate: true }, mockE());
+    let c = new Contest(
+      { a: 'b', candidates: [candidate1] },
+      undefined,
+      { noValidate: true },
+      mockE()
+    );
     expect(c.candidates).toHaveLength(1);
 
     c.candidateSet(candidate1a);
@@ -120,7 +166,6 @@ describe('lib/contest | candidateSet', () => {
 
 // Validation function
 describe('lib/contest | validation', () => {
-
   test('should throw on invalid', () => {
     expect(() => {
       let c = new Contest({ a: 'b' }, {}, {}, mockE());
@@ -130,14 +175,17 @@ describe('lib/contest | validation', () => {
 
   test('should not throw on valid', () => {
     expect(() => {
-      let c = new Contest({
-        district: 'abc',
-        contest: '123',
-        name: 'Test contest',
-        candidates: [
-          { id: '123', lastName: 'name' }
-        ]
-      }, { type: 'county', }, {}, mockE({ id: 1234 }));
+      let c = new Contest(
+        {
+          district: 'abc',
+          contest: '123',
+          name: 'Test contest',
+          candidates: [{ id: '123', lastName: 'name' }]
+        },
+        { type: 'county' },
+        {},
+        mockE({ id: 1234 })
+      );
       return c;
     }).not.toThrow(/.*/i);
   });
@@ -145,7 +193,6 @@ describe('lib/contest | validation', () => {
 
 // Use some real input
 describe('lib/contest | real input', () => {
-
   test('county commissioner, nonpartisan', () => {
     let input = [
       'MN;02;;0393;County Commissioner District 3;03;9001;Robyn West;;;NP;20;20;1557;58.56;2659',
@@ -283,7 +330,7 @@ describe('lib/contest | real input', () => {
       'MN;;;1010;Council Member (Benson) (Elect 2);05212;9901;WRITE-IN**;;;WI;2;2;2;0.13;1543'
     ];
     let props = {
-      type: 'local',
+      type: 'local'
     };
     let e = mockE({
       id: 'TEST',
@@ -311,5 +358,75 @@ describe('lib/contest | real input', () => {
     expect(c.candidates[0].get('winner')).toBe(true);
     expect(c.candidates[1].get('winner')).toBe(true);
     expect(c.get('close')).toBe(true);
+  });
+});
+
+// Some more specifics for update winners
+describe('lib/contest | updateWinners', () => {
+  test('simple, no winner, not final', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      candidates: [
+        { id: 'a', last: 'A', votes: 10 },
+        { id: 'b', last: 'B', votes: 10 }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+    expect(c.candidates[0].get('winner')).toBe(false);
+    expect(c.candidates[1].get('winner')).toBe(false);
+    expect(c.get('close')).toBe(false);
+  });
+
+  test('simple, winner, final', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      candidates: [
+        { id: 'a', last: 'A', votes: 60 },
+        { id: 'b', last: 'B', votes: 40 }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(100);
+    expect(c.get('close')).toBe(false);
+
+    expect(c.candidates[0].get('winner')).toBe(true);
+    expect(c.candidates[1].get('winner')).toBe(false);
   });
 });
