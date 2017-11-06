@@ -73,6 +73,30 @@ let common = {
     type: 'boolean',
     default: false
   },
+  'use-meta-cache': {
+    alias: 'm',
+    describe: 'Use cache for meta.',
+    type: 'boolean',
+    default: false
+  },
+  'use-supplement-cache': {
+    alias: 'b',
+    describe: 'Use cache for supplement.',
+    type: 'boolean',
+    default: false
+  },
+  'use-results-cache': {
+    alias: 'v',
+    describe: 'Use cache for results.',
+    type: 'boolean',
+    default: false
+  },
+  'use-cache-on-fail': {
+    alias: 'g',
+    describe: 'Use cache for results.',
+    type: 'boolean',
+    default: false
+  },
   test: {
     alias: 't',
     describe:
@@ -124,6 +148,10 @@ command.command(
       .option('election', common.election)
       .option('output', common.output)
       .option('use-cache', common['use-cache'])
+      .option('use-meta-cache', common['use-meta-cache'])
+      .option('use-supplement-cache', common['use-supplement-cache'])
+      .option('use-results-cache', common['use-results-cache'])
+      .option('use-cache-on-fail', common['use-cache-on-fail'])
       .option('test', common.test);
   },
   async y => {
@@ -142,7 +170,11 @@ command.command(
     try {
       e = new Election(elections[y.election], {
         exportPath: path.join(y.output, y.election),
-        cache: y['use-cache']
+        cache: y['use-cache'],
+        cacheMeta: y['use-meta-cache'],
+        cacheSupplement: y['use-supplement-cache'],
+        cacheResults: y['use-results-cache'],
+        cacheOnFail: y['use-cache-on-fail']
       });
       spinCreate.succeed();
     }
@@ -155,11 +187,14 @@ command.command(
     // Fetch
     let spinFetch = ora('Fetching results').start();
     try {
-      await e.fetchResults();
-
-      if (process.env.TEST_TIMELINE || y.test) {
+      if (process.env.TEST_TIMELINE || y.test || y.test === '') {
+        e.set('test', true);
+        await e.fetchResults();
         testData(e.contests, { timeline: process.env.TEST_TIMELINE || y.test });
         e.exportResults();
+      }
+      else {
+        await e.fetchResults();
       }
 
       spinFetch.succeed();
@@ -446,7 +481,11 @@ command.command(
       .option('election', common.election)
       .option('output', common.output)
       .option('use-cache', common['use-cache'])
+      .option('use-meta-cache', common['use-meta-cache'])
+      .option('use-supplement-cache', common['use-supplement-cache'])
+      .option('use-results-cache', common['use-results-cache'])
       .option('test', common.test)
+      .option('use-cache-on-fail', common['use-cache-on-fail'])
       .option('upload', {
         alias: 'p',
         describe: 'Upload print files to Saxotech.',
@@ -470,7 +509,11 @@ command.command(
     try {
       e = new Election(elections[y.election], {
         exportPath: path.join(y.output, y.election),
-        cache: y['use-cache']
+        cache: y['use-cache'],
+        cacheMeta: y['use-meta-cache'],
+        cacheSupplement: y['use-supplement-cache'],
+        cacheResults: y['use-results-cache'],
+        cacheOnFail: y['use-cache-on-fail']
       });
       spinCreate.succeed();
     }
