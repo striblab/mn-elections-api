@@ -429,4 +429,425 @@ describe('lib/contest | updateWinners', () => {
     expect(c.candidates[0].get('winner')).toBe(true);
     expect(c.candidates[1].get('winner')).toBe(false);
   });
+
+  test('simple, winner, final, close', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      candidates: [
+        { id: 'a', last: 'A', votes: 501 },
+        { id: 'b', last: 'B', votes: 499 }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(1000);
+    expect(c.get('close')).toBe(true);
+
+    expect(c.candidates[0].get('winner')).toBe(true);
+    expect(c.candidates[1].get('winner')).toBe(false);
+  });
+
+  test('simple, winner, final, close (< 400)', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      candidates: [
+        { id: 'a', last: 'A', votes: 51 },
+        { id: 'b', last: 'B', votes: 49 }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(100);
+    expect(c.get('close')).toBe(true);
+
+    expect(c.candidates[0].get('winner')).toBe(true);
+    expect(c.candidates[1].get('winner')).toBe(false);
+  });
+
+  test('multiple seats, final, winner', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      seats: 2,
+      candidates: [
+        { id: 'a', last: 'A', votes: 100 },
+        { id: 'b', last: 'B', votes: 60 },
+        { id: 'c', last: 'C', votes: 40 }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(200);
+    expect(c.get('close')).toBe(false);
+
+    expect(c.candidates[0].get('winner')).toBe(true);
+    expect(c.candidates[1].get('winner')).toBe(true);
+    expect(c.candidates[2].get('winner')).toBe(false);
+  });
+
+  test('simple, write-in winner', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      candidates: [
+        { id: 'a', writeIn: true, votes: 60 },
+        { id: 'b', last: 'B', votes: 40 }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(true);
+    expect(c.get('totalVotes')).toBe(100);
+    expect(c.get('close')).toBe(false);
+
+    expect(c.candidates[0].get('winner')).toBe(false);
+    expect(c.candidates[1].get('winner')).toBe(false);
+  });
+
+  test('ranked, winner, first-round', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      ranked: true,
+      candidates: [
+        {
+          id: 'a',
+          last: 'A',
+          ranks: [{ rankedChoice: 1, votes: 200, percent: 66.67 }]
+        },
+        {
+          id: 'b',
+          last: 'B',
+          ranks: [{ rankedChoice: 1, votes: 60, percent: 20 }]
+        },
+        {
+          id: 'c',
+          last: 'C',
+          ranks: [{ rankedChoice: 1, votes: 40, precent: 13.33 }]
+        }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(300);
+    expect(c.get('close')).toBe(false);
+
+    expect(c.candidates[0].get('winner')).toBe(true);
+    expect(c.candidates[1].get('winner')).toBe(false);
+    expect(c.candidates[2].get('winner')).toBe(false);
+  });
+
+  test('ranked, final, no-winner, first-round', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      ranked: true,
+      candidates: [
+        {
+          id: 'a',
+          last: 'A',
+          ranks: [{ rankedChoice: 1, votes: 33, percent: 33 }]
+        },
+        {
+          id: 'b',
+          last: 'B',
+          ranks: [{ rankedChoice: 1, votes: 33, percent: 33 }]
+        },
+        {
+          id: 'c',
+          last: 'C',
+          ranks: [{ rankedChoice: 1, votes: 33, precent: 33 }]
+        }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(99);
+    expect(c.get('close')).toBe(false);
+
+    expect(c.candidates[0].get('winner')).toBe(false);
+    expect(c.candidates[1].get('winner')).toBe(false);
+    expect(c.candidates[2].get('winner')).toBe(false);
+  });
+
+  test('ranked, final, counted', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      ranked: true,
+      candidates: [
+        {
+          id: 'a',
+          last: 'A',
+          votes: 20,
+          ranks: [{ rankedChoice: 1, votes: 100, percent: 33 }]
+        },
+        {
+          id: 'b',
+          last: 'B',
+          votes: 20,
+          ranks: [{ rankedChoice: 1, votes: 60, percent: 33 }]
+        },
+        {
+          id: 'c',
+          last: 'C',
+          votes: 160,
+          ranks: [{ rankedChoice: 1, votes: 40, precent: 33 }]
+        }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(200);
+    expect(c.get('close')).toBe(false);
+
+    // Resorts
+    expect(_.find(c.candidates, a => a.get('last') === 'C').get('winner')).toBe(
+      true
+    );
+    expect(_.find(c.candidates, a => a.get('last') === 'A').get('winner')).toBe(
+      false
+    );
+    expect(_.find(c.candidates, a => a.get('last') === 'B').get('winner')).toBe(
+      false
+    );
+  });
+
+  test('ranked, final, first-round, no-winner, over 50', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      ranked: true,
+      candidates: [
+        {
+          id: 'a',
+          last: 'A',
+          ranks: [{ rankedChoice: 1, votes: 10010, percent: 50.05 }]
+        },
+        {
+          id: 'b',
+          last: 'B',
+          ranks: [{ rankedChoice: 1, votes: 9985, percent: 49.93 }]
+        },
+        {
+          id: 'c',
+          last: 'C',
+          ranks: [{ rankedChoice: 1, votes: 5, precent: 0.03 }]
+        }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(20000);
+    expect(c.get('close')).toBe(false);
+
+    expect(c.candidates[0].get('winner')).toBe(false);
+    expect(c.candidates[1].get('winner')).toBe(false);
+    expect(c.candidates[2].get('winner')).toBe(false);
+  });
+
+  test('ranked, final, first-round, winner, close', () => {
+    let contest = {
+      id: '1',
+      district: '11',
+      contest: '111',
+      name: 'Contest 1',
+      totalPrecincts: 10,
+      precincts: 10,
+      ranked: true,
+      candidates: [
+        {
+          id: 'a',
+          last: 'A',
+          ranks: [{ rankedChoice: 1, votes: 10060, percent: 50.3 }]
+        },
+        {
+          id: 'b',
+          last: 'B',
+          ranks: [{ rankedChoice: 1, votes: 9880, percent: 49.4 }]
+        },
+        {
+          id: 'c',
+          last: 'C',
+          ranks: [{ rankedChoice: 1, votes: 60, precent: 0.3 }]
+        }
+      ]
+    };
+    let props = {
+      type: 'local'
+    };
+    let e = mockE({
+      id: '1234',
+      primary: false
+    });
+
+    expect(() => {
+      return new Contest(_.cloneDeep(contest), props, {}, e);
+    }).not.toThrow(/.*/i);
+
+    let c = new Contest(_.cloneDeep(contest), props, {}, e);
+    c.updateWinners();
+
+    expect(c.get('final')).toBe(true);
+    expect(c.get('uncontested')).toBe(false);
+    expect(c.get('totalVotes')).toBe(20000);
+    expect(c.get('close')).toBe(true);
+
+    expect(c.candidates[0].get('winner')).toBe(true);
+    expect(c.candidates[1].get('winner')).toBe(false);
+    expect(c.candidates[2].get('winner')).toBe(false);
+  });
 });
