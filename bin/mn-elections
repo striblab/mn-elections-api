@@ -97,6 +97,13 @@ let common = {
     type: 'boolean',
     default: false
   },
+  'check-for-change': {
+    alias: 'q',
+    describe:
+      'Check remote files for date or size changes, otherwise use local files.',
+    type: 'boolean',
+    default: false
+  },
   test: {
     alias: 't',
     describe:
@@ -152,6 +159,7 @@ command.command(
       .option('use-supplement-cache', common['use-supplement-cache'])
       .option('use-results-cache', common['use-results-cache'])
       .option('use-cache-on-fail', common['use-cache-on-fail'])
+      .option('check-for-change', common['check-for-change'])
       .option('test', common.test);
   },
   async y => {
@@ -174,7 +182,8 @@ command.command(
         cacheMeta: y['use-meta-cache'],
         cacheSupplement: y['use-supplement-cache'],
         cacheResults: y['use-results-cache'],
-        cacheOnFail: y['use-cache-on-fail']
+        cacheOnFail: y['use-cache-on-fail'],
+        checkChange: y['check-for-change']
       });
       spinCreate.succeed();
     }
@@ -486,6 +495,7 @@ command.command(
       .option('use-results-cache', common['use-results-cache'])
       .option('test', common.test)
       .option('use-cache-on-fail', common['use-cache-on-fail'])
+      .option('check-for-change', common['check-for-change'])
       .option('upload', {
         alias: 'p',
         describe: 'Upload print files to Saxotech.',
@@ -513,7 +523,8 @@ command.command(
         cacheMeta: y['use-meta-cache'],
         cacheSupplement: y['use-supplement-cache'],
         cacheResults: y['use-results-cache'],
-        cacheOnFail: y['use-cache-on-fail']
+        cacheOnFail: y['use-cache-on-fail'],
+        checkChange: y['check-for-change']
       });
       spinCreate.succeed();
     }
