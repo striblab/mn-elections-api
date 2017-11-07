@@ -109,6 +109,11 @@ let common = {
     describe:
       'Whether to add test data, this should be "early", "middle" or "end"',
     type: 'string'
+  },
+  'election-notes': {
+    alias: 'x',
+    describe: 'An urgent message to communicate to clients.',
+    type: 'string'
   }
 };
 
@@ -160,6 +165,7 @@ command.command(
       .option('use-results-cache', common['use-results-cache'])
       .option('use-cache-on-fail', common['use-cache-on-fail'])
       .option('check-for-change', common['check-for-change'])
+      .option('election-notes', common['election-notes'])
       .option('test', common.test);
   },
   async y => {
@@ -185,6 +191,9 @@ command.command(
         cacheOnFail: y['use-cache-on-fail'],
         checkChange: y['check-for-change']
       });
+      if (y['election-notes']) {
+        e.set('notes', y['election-notes']);
+      }
       spinCreate.succeed();
     }
     catch (e) {
@@ -247,7 +256,8 @@ command.command(
     return y
       .usage('\nSetup supplement usage:\n  $0 setup -e <election> [args]')
       .option('election', common.election)
-      .option('output', common.output);
+      .option('output', common.output)
+      .option('election-notes', common['election-notes']);
   },
   async y => {
     let elections = getElections(y);
@@ -296,6 +306,9 @@ command.command(
       e = new Election(elections[y.election], {
         exportPath: path.join(y.output, y.election)
       });
+      if (y['election-notes']) {
+        e.set('notes', y['election-notes']);
+      }
       spinCreate.succeed();
     }
     catch (e) {
@@ -453,6 +466,9 @@ command.command(
       e = new Election(elections[y.election], {
         exportPath: path.join(y.output, y.election)
       });
+      if (y['election-notes']) {
+        e.set('notes', y['election-notes']);
+      }
       spinCreate.succeed();
     }
     catch (e) {
@@ -489,6 +505,7 @@ command.command(
       .usage('\nPrint usage:\n  $0 print -e <election> [args]')
       .option('election', common.election)
       .option('output', common.output)
+      .option('election-notes', common['election-notes'])
       .option('use-cache', common['use-cache'])
       .option('use-meta-cache', common['use-meta-cache'])
       .option('use-supplement-cache', common['use-supplement-cache'])
@@ -526,6 +543,9 @@ command.command(
         cacheOnFail: y['use-cache-on-fail'],
         checkChange: y['check-for-change']
       });
+      if (y['election-notes']) {
+        e.set('notes', y['election-notes']);
+      }
       spinCreate.succeed();
     }
     catch (e) {
