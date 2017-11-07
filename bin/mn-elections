@@ -8,7 +8,7 @@
 require('dotenv').load();
 const command = require('yargs');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const _ = require('lodash');
 const mkdirp = require('mkdirp');
 const lSymbols = require('log-symbols');
@@ -114,6 +114,12 @@ let common = {
     alias: 'x',
     describe: 'An urgent message to communicate to clients.',
     type: 'string'
+  },
+  'clean-on-error': {
+    alias: 'L',
+    describe: 'Clear output on error.',
+    type: 'boolean',
+    default: false
   }
 };
 
@@ -166,6 +172,7 @@ command.command(
       .option('use-cache-on-fail', common['use-cache-on-fail'])
       .option('check-for-change', common['check-for-change'])
       .option('election-notes', common['election-notes'])
+      .option('clean-on-error', common['clean-on-error'])
       .option('test', common.test);
   },
   async y => {
@@ -194,6 +201,7 @@ command.command(
       if (y['election-notes']) {
         e.set('notes', y['election-notes']);
       }
+
       spinCreate.succeed();
     }
     catch (e) {
@@ -217,9 +225,20 @@ command.command(
 
       spinFetch.succeed();
     }
-    catch (e) {
+    catch (ex) {
       spinFetch.fail();
-      debug(e);
+      debug(ex);
+
+      if (y['clean-on-error'] && e.exportPath) {
+        try {
+          debug('Trying to clean up: ' + e.exportPath);
+          fs.removeSync(e.exportPath);
+        }
+        catch (ex) {
+          debug(ex);
+        }
+      }
+
       error('Error trying fetch results for election "' + y.election + '"');
     }
 
