@@ -1075,5 +1075,270 @@
         "rename": [[["\\((i|s)sd\\s#[0-9]+\\)", ""]]]
       }
     ]
+  },
+  "20180814": {
+    "id": "20180814",
+    "primary": true,
+    "sos": {
+      "host": "ftp.sos.state.mn.us",
+      "dir": "20180814"
+    },
+    "results": [
+      {
+        "file": "attorneygen.txt",
+        "type": "state"
+      },
+      {
+        "file": "Governor.txt",
+        "type": "state"
+      },
+      {
+        "file": "ushouse.txt",
+        "type": "us-house"
+      },
+      {
+        "file": "ussenate.txt",
+        "type": "us-senate"
+      },
+      {
+        "file": "judicialdst.txt",
+        "type": "judicial"
+      },
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "local.txt",
+        "type": "local",
+        "hasRankedChoice": true
+      },
+      {
+        "file": "SDRaceQuestions.txt",
+        "type": "school"
+      },
+      {
+        "file": "cntyRaceQuestions.txt",
+        "type": "county"
+      }
+    ],
+    "meta": {
+      "districts": [
+        {
+          "file": "mcdtbl.txt",
+          "type": "local"
+        },
+        {
+          "file": "Cntytbl.txt",
+          "type": "county"
+        },
+        {
+          "file": "PrctTbl.txt",
+          "type": "precinct"
+        },
+        {
+          "file": "SchoolDistTbl.txt",
+          "type": "school"
+        }
+      ],
+      "questions": [
+        {
+          "file": "BallotQuestions.txt",
+          "type": "questions"
+        }
+      ]
+    },
+    "print": [
+      {
+        "title": "U.S. Senate",
+        "headings": ["sectionTitle", ["name", "primaryParty"]],
+        "separators": [" ", " - "],
+        "filename": "ELEX_USSEN",
+        "where": {
+          "type": {
+            "$regex": "us-senate",
+            "$options": "i"
+          }
+        }
+      },
+      {
+        "title": "U.S. House",
+        "headings": ["sectionTitle", ["district", "primaryParty"]],
+        "separators": [" ", " - "],
+        "filename": "ELEX_USHSE",
+        "where": {
+          "type": {
+            "$regex": "us-house",
+            "$options": "i"
+          }
+        },
+        "rename": [null, [["^([0-9]+)", "District $1"]]]
+      },
+      {
+        "title": "Minnesota Governor",
+        "headings": ["name", "primaryParty"],
+        "filename": "ELEX_MNGOV",
+        "where": {
+          "area": {
+            "$regex": "minnesota",
+            "$options": "i"
+          },
+          "name": {
+            "$regex": "governor",
+            "$options": "i"
+          }
+        }
+      },
+      {
+        "title": "Minnesota Attorney General",
+        "headings": ["name", "primaryParty"],
+        "filename": "ELEX_MNAGEN",
+        "where": {
+          "area": {
+            "$regex": "minnesota",
+            "$options": "i"
+          },
+          "name": {
+            "$regex": "attorney general",
+            "$options": "i"
+          }
+        }
+      },
+      {
+        "title": "Minnesota House",
+        "headings": ["sectionTitle", ["name", "primaryParty"]],
+        "separators": [" ", " - "],
+        "filename": "ELEX_MNHSE",
+        "where": {
+          "type": {
+            "$regex": "state-house",
+            "$options": "i"
+          }
+        },
+        "rename": [
+          null,
+          [["state\\s+representative\\s+district\\s+(.+)$", "District $1"]]
+        ]
+      },
+      {
+        "title": "Judicial",
+        "headings": ["sectionTitle", ["name", "seatName", "subArea"]],
+        "filename": "ELEX_MNJUD",
+        "where": {
+          "type": "judicial"
+        },
+        "rename": [null, [["^judge\\s+-\\s+", ""]]]
+      },
+      {
+        "title": "Metro local races",
+        "filename": "ELEX_METCITY",
+        "where": {
+          "metro": true,
+          "twinCities": {
+            "$not": true
+          },
+          "type": "local"
+        }
+      },
+      {
+        "title": "Metro school board",
+        "filename": "ELEX_METSKUL",
+        "where": {
+          "metro": true,
+          "twinCities": {
+            "$not": true
+          },
+          "name": {
+            "$regex": "school board",
+            "$options": "i"
+          }
+        },
+        "headings": ["area", ["name", "seatName", "subArea"]],
+        "rename": [
+          [["\\((i|s)sd\\s#[0-9]+\\)", ""]],
+          [
+            ["(for\\s)?school board member", ""],
+            ["^at large(.*)", "At Large$1"]
+          ]
+        ]
+      },
+      {
+        "title": "Metro school questions",
+        "inlineQuestionTitle": true,
+        "filename": "ELEX_METQUE",
+        "where": {
+          "metro": true,
+          "twinCities": {
+            "$not": true
+          },
+          "question": true,
+          "name": {
+            "$regex": "school",
+            "$options": "i"
+          }
+        },
+        "headings": ["area"],
+        "rename": [[["\\((i|s)sd\\s#[0-9]+\\)", ""]]]
+      },
+      {
+        "title": "Out-state local races",
+        "filename": "ELEX_MNCITY",
+        "where": {
+          "metro": {
+            "$not": true
+          },
+          "type": "local"
+        }
+      },
+      {
+        "title": "Out-state school board",
+        "filename": "ELEX_MNSKUL",
+        "where": {
+          "metro": {
+            "$not": true
+          },
+          "name": {
+            "$regex": "school board",
+            "$options": "i"
+          }
+        },
+        "headings": ["area", ["name", "seatName", "subArea"]],
+        "rename": [
+          [["\\((i|s)sd\\s#[0-9]+\\)", ""]],
+          [
+            ["(for\\s)?school board member", ""],
+            ["^at large(.*)", "At Large$1"]
+          ]
+        ]
+      },
+      {
+        "title": "Out-state school questions",
+        "filename": "ELEX_MNQUE",
+        "inlineQuestionTitle": true,
+        "where": {
+          "metro": {
+            "$not": true
+          },
+          "question": true,
+          "name": {
+            "$regex": "school",
+            "$options": "i"
+          }
+        },
+        "headings": ["area"],
+        "rename": [[["\\((i|s)sd\\s#[0-9]+\\)", ""]]]
+      },
+      {
+        "title": "County",
+        "filename": "ELEX_MNCTY",
+        "inlineQuestionTitle": true,
+        "where": {
+          "type": {
+            "$regex": "(county|county-comissioner)",
+            "$options": "i"
+          }
+        }
+      }
+    ]
   }
 }
