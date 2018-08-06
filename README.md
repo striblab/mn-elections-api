@@ -45,7 +45,7 @@ Options:
 Common options:
 
 - `--election`: Most, but not all commands, require the election to be defined with this option, which should be the election ID, which is the date of the election, like `20131105`.
-- `--debug`: This does not currently work. This should turn on debugging.
+- `--debug`: This does not currently work. This should turn on debugging. Use the environment variable `DEBUG=*` instead.
 - `--config`: Path to where the `elections.json` is. By default it is the one provided in this package, which should be good enough for most cases. To make your own config, see the `spec/ELECTION.md` specification.
 - `--use-cache`: Use cache files for meta and supplement data.
 - `--test`: Add random test data for contests that don't have any votes.
