@@ -1151,17 +1151,19 @@
     "print": [
       {
         "title": "U.S. Senate",
-        "headings": ["sectionTitle", ["name", "primaryParty"]],
+        "headings": [["name", "primaryParty"]],
         "separators": [" ", ": "],
         "filename": "ELEX_USSEN",
         "where": {
           "type": {
             "$regex": "us-senate",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         },
         "rename": [
-          null,
           [
             ["^u.s. senator: ", "Scheduled: "],
             ["^u.s. senator special election:", "Special:"],
@@ -1171,23 +1173,23 @@
       },
       {
         "title": "U.S. House",
-        "headings": ["sectionTitle", ["district", "primaryParty"]],
+        "headings": [["district", "primaryParty"]],
         "separators": [" ", ": "],
         "filename": "ELEX_USHSE",
         "where": {
           "type": {
             "$regex": "us-house",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         },
-        "rename": [
-          null,
-          [["^([0-9]+)", "District $1"], [": R$", ": Republican"]]
-        ]
+        "rename": [[["^([0-9]+)", "District $1"], [": R$", ": Republican"]]]
       },
       {
         "title": "Minnesota Governor",
-        "headings": ["name", "primaryParty"],
+        "headings": ["primaryParty"],
         "filename": "ELEX_MNGOV",
         "where": {
           "area": {
@@ -1197,12 +1199,15 @@
           "name": {
             "$regex": "governor",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         }
       },
       {
         "title": "Minnesota Attorney General",
-        "headings": ["name", "primaryParty"],
+        "headings": ["primaryParty"],
         "filename": "ELEX_MNAGEN",
         "where": {
           "area": {
@@ -1212,22 +1217,27 @@
           "name": {
             "$regex": "attorney general",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         }
       },
       {
         "title": "Minnesota House",
-        "headings": ["sectionTitle", ["name", "primaryParty"]],
+        "headings": [["name", "primaryParty"]],
         "separators": [" ", ": "],
         "filename": "ELEX_MNHSE",
         "where": {
           "type": {
             "$regex": "state-house",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         },
         "rename": [
-          null,
           [
             ["state\\s+representative\\s+district\\s+(.+)$", "District $1"],
             [": R$", ": Republican"]
@@ -1236,13 +1246,15 @@
       },
       {
         "title": "Judicial",
-        "headings": ["sectionTitle", ["name", "seatName", "subArea"]],
+        "headings": [["name", "seatName", "subArea"]],
         "filename": "ELEX_MNJUD",
         "where": {
-          "type": "judicial"
+          "type": "judicial",
+          "uncontested": {
+            "$not": true
+          }
         },
         "rename": [
-          null,
           [
             ["^judge\\s+-\\s+", ""],
             [
@@ -1257,7 +1269,10 @@
         "filename": "ELEX_METCITY",
         "where": {
           "metro": true,
-          "type": "local"
+          "type": "local",
+          "uncontested": {
+            "$not": true
+          }
         },
         "rename": [
           [["city of ", ""]],
@@ -1275,6 +1290,9 @@
           "name": {
             "$regex": "school board",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         },
         "headings": ["area", ["name", "seatName", "subArea"]],
@@ -1296,6 +1314,9 @@
           "name": {
             "$regex": "school",
             "$options": "i"
+          },
+          "uncontested": {
+            "$not": true
           }
         },
         "headings": ["area"],
