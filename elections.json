@@ -1152,7 +1152,7 @@
       {
         "title": "U.S. Senate",
         "headings": [["name", "primaryParty"]],
-        "separators": [" ", ": "],
+        "separators": [": "],
         "filename": "ELEX_USSEN",
         "where": {
           "type": {
@@ -1174,7 +1174,7 @@
       {
         "title": "U.S. House",
         "headings": [["district", "primaryParty"]],
-        "separators": [" ", ": "],
+        "separators": [": "],
         "filename": "ELEX_USHSE",
         "where": {
           "type": {
@@ -1203,7 +1203,8 @@
           "uncontested": {
             "$not": true
           }
-        }
+        },
+        "rename": [[["^R$", "Republican"]]]
       },
       {
         "title": "Minnesota Attorney General",
@@ -1221,12 +1222,13 @@
           "uncontested": {
             "$not": true
           }
-        }
+        },
+        "rename": [[["^R$", "Republican"]]]
       },
       {
         "title": "Minnesota House",
         "headings": [["name", "primaryParty"]],
-        "separators": [" ", ": "],
+        "separators": [": "],
         "filename": "ELEX_MNHSE",
         "where": {
           "type": {
