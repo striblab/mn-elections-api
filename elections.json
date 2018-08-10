@@ -1323,6 +1323,22 @@
         },
         "headings": ["area"],
         "rename": [[["\\((i|s)sd\\s#[0-9]+\\)", ""]]]
+      },
+      {
+        "title": "Metro county races",
+        "inlineQuestionTitle": true,
+        "filename": "ELEX_METCTY",
+        "where": {
+          "metroSevenCounty": true,
+          "uncontested": {
+            "$not": true
+          },
+          "type": {
+            "$regex": "^county",
+            "$options": "i"
+          }
+        },
+        "rename": [null, [["^county ", ""]]]
       }
     ]
   }
