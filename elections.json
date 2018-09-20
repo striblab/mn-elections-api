@@ -685,8 +685,7 @@
     }
   },
   "20170214": {
-    "notes":
-      "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
+    "notes": "There is a localPrct.txt file that suggest there is more than just the state house race, but nothing else that supports this.",
     "special": true,
     "sos": {
       "host": "ftp.sos.state.mn.us",
@@ -1341,5 +1340,76 @@
         "rename": [null, [["^county ", ""]]]
       }
     ]
+  },
+  "20181106": {
+    "id": "20181106",
+    "primary": false,
+    "sos": {
+      "host": "ftp.sos.state.mn.us",
+      "dir": "20181106"
+    },
+    "results": [
+      {
+        "file": "attorneygen.txt",
+        "type": "state"
+      },
+      {
+        "file": "auditor.txt",
+        "type": "state"
+      },
+      {
+        "file": "secofstate.txt",
+        "type": "state"
+      },
+      {
+        "file": "Governor.txt",
+        "type": "state"
+      },
+      {
+        "file": "ushouse.txt",
+        "type": "us-house"
+      },
+      {
+        "file": "ussenate.txt",
+        "type": "us-senate"
+      },
+      {
+        "file": "judicialdst.txt",
+        "type": "judicial-district"
+      },
+      {
+        "file": "judicial.txt",
+        "type": "judicial"
+      },
+      {
+        "file": "LegislativeByDistrict.txt",
+        "type": "state-house"
+      },
+      {
+        "file": "stsenate.txt",
+        "type": "state-senate"
+      },
+      {
+        "file": "local.txt",
+        "type": "local"
+      },
+      {
+        "file": "SDRaceQuestions.txt",
+        "type": "school"
+      },
+      {
+        "file": "cntyRaceQuestions.txt",
+        "type": "county"
+      },
+      {
+        "file": "hospital.txt",
+        "type": "hospital"
+      }
+    ],
+    "meta": {
+      "districts": [],
+      "questions": []
+    },
+    "print": []
   }
 }
