@@ -67,6 +67,7 @@ The following describes the fields for a Contest object.
   stateHouse: '12A',
   stateSenate: '12',
   congress: '1',
+  judicial: '1',
   // County should be the MN county codes 1-87, where 88 is state-wide
   // race
   county: '17',
