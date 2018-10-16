@@ -128,11 +128,23 @@ command.command(
   'list',
   'List available elections.',
   y => {
-    return y.usage('\nList usage:\n  $0 list');
+    return y.usage('\nList usage:\n  $0 list')
+      .option('json', {
+        alias: 'j',
+        describe: 'Output JSON.',
+        type: 'boolean',
+        default: false
+      });
   },
   y => {
     let elections = getElections(y);
     updateDebug(y);
+
+    // JSON
+    if (y.json) {
+      console.log(JSON.stringify(elections, null, '  '));
+      return;
+    }
 
     output('\nAvailable elections:', '\n');
 
