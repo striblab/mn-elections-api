@@ -361,6 +361,35 @@ describe('lib/contest | real input', () => {
   });
 });
 
+test('handles district court', () => {
+  let input = [
+    'MN;;;1010;Judge - 2nd District Court 2;05212;9001;DENNIS MINOR;;;NP;2;2;190;12.31;1543',
+    'MN;;;1010;Judge - 2nd District Court 2;05212;9002;LARRY SMITH;;;NP;2;2;123;7.97;1543'
+  ];
+  let props = {
+    type: 'judicial-district'
+  };
+  let e = mockE({
+    id: 'TEST',
+    primary: false
+  });
+
+  // Put together
+  let c = new Contest(input[0], props, {}, e);
+  input.forEach((i, ii) => {
+    if (ii > 0) {
+      let c2 = new Contest(i, props, {}, e);
+      expect(c2.id()).toBe(c.id());
+      c.setAll(c2.toJSON());
+    }
+  });
+
+  // Check some basics
+  expect(c.get('name')).toBe('Judge');
+  expect(c.get('area')).toBe('2nd District Court');
+  expect(c.get('seatName')).toBe('2');
+});
+
 // Some more specifics for update winners
 describe('lib/contest | updateWinners', () => {
   test('simple, no winner, not final', () => {

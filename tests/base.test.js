@@ -293,7 +293,7 @@ describe('lib/base | parseSoSContest', () => {
   });
 
   test('handles regular office', () => {
-    expect(base.parseSoSContest('office for something')).toEqual({
+    expect(base.parseSoSContest('office for something')).toMatchObject({
       name: 'office for something',
       seats: 1,
       question: false,
@@ -302,7 +302,9 @@ describe('lib/base | parseSoSContest', () => {
   });
 
   test('handles area', () => {
-    expect(base.parseSoSContest('office for something (Area 54)')).toEqual({
+    expect(
+      base.parseSoSContest('office for something (Area 54)')
+    ).toMatchObject({
       name: 'office for something',
       area: 'Area 54',
       seats: 1,
@@ -312,16 +314,18 @@ describe('lib/base | parseSoSContest', () => {
   });
 
   test('handles question (and area)', () => {
-    expect(base.parseSoSContest('Question 100 (Area #1)')).toEqual({
-      name: 'Question 100',
+    expect(base.parseSoSContest('Question 100 (Area #1)')).toMatchObject({
+      name: 'Question',
+      seatName: '100',
       area: 'Area #1',
       seats: 1,
       question: true,
       ranked: false
     });
 
-    expect(base.parseSoSContest('CITY QUESTION 100 (Area #1)')).toEqual({
-      name: 'CITY QUESTION 100',
+    expect(base.parseSoSContest('CITY QUESTION 100 (Area #1)')).toMatchObject({
+      name: 'CITY QUESTION',
+      seatName: '100',
       area: 'Area #1',
       seats: 1,
       question: true,
@@ -330,7 +334,9 @@ describe('lib/base | parseSoSContest', () => {
   });
 
   test('handles ranked choice', () => {
-    expect(base.parseSoSContest('office for something First choice')).toEqual({
+    expect(
+      base.parseSoSContest('office for something First choice')
+    ).toMatchObject({
       name: 'office for something',
       seats: 1,
       question: false,
@@ -340,7 +346,7 @@ describe('lib/base | parseSoSContest', () => {
   });
 
   test('handles seats', () => {
-    expect(base.parseSoSContest('office for $$ (Elect 3)')).toEqual({
+    expect(base.parseSoSContest('office for $$ (Elect 3)')).toMatchObject({
       name: 'office for $$',
       seats: 3,
       question: false,
@@ -351,7 +357,7 @@ describe('lib/base | parseSoSContest', () => {
   test('handles seats, ranked choice, and area', () => {
     expect(
       base.parseSoSContest('ANOTHER OFFICE Fourth Choice (Area) (Elect 33)')
-    ).toEqual({
+    ).toMatchObject({
       name: 'ANOTHER OFFICE',
       area: 'Area',
       seats: 33,
@@ -362,7 +368,7 @@ describe('lib/base | parseSoSContest', () => {
 
     expect(
       base.parseSoSContest('ANOTHER OFFICE Fourth Choice (Elect 33) (Area)')
-    ).toEqual({
+    ).toMatchObject({
       name: 'ANOTHER OFFICE',
       area: 'Area',
       seats: 33,
